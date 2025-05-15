@@ -1,0 +1,11 @@
+#variable initialization
+apple_price = 2.50
+number_purchased = 12
+tax = 1.07
+
+#calculations & print
+total_bill = apple_price * number_purchased * tax
+if total_bill == 0:
+    print("check inputs")
+else:
+    print("you purchased:", number_purchased, "apples for a total price of:", total_bill)
