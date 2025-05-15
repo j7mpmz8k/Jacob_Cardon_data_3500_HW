@@ -7,7 +7,7 @@ print(5 != 8)
 #Out: true
 
 #IF statement syntax(must end with : and reported results must start with indentation
-If 5 > 10:
+if 5 > 10:
 	print("true")
 else: #optional
 	print("false")
@@ -28,7 +28,7 @@ else:
 #using while to repeat until false
 age = 1
 while age < 3:
-	print:("age: ", age)
+	print("age: ", age)
 	age = age + 1
 else:
 	print("Your age is now 3!")
@@ -36,3 +36,8 @@ else:
 '''Out: 1
         2
         3'''
+
+#for loop through a string
+name = ("John")
+for i in name:
+	print("letter: ", i)
