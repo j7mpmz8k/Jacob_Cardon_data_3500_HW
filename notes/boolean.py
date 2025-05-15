@@ -32,7 +32,6 @@ while age < 3:
 	age = age + 1
 else:
 	print("Your age is now 3!")
-#after false moves to this line
 '''Out: 1
         2
         3'''

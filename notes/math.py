@@ -14,9 +14,11 @@ print(number)
 #Out: 3 #int OR use int()
 
 #numbers input from user are strings, use eval() to convert
+inputvariable = input("enter a number: ")
 inputvariable = eval(inputvariable)
 
 #augmented operators
+age = 0 #initializing variable
 age += 1
 #this is the same as age = age + 1
 #more:

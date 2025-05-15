@@ -1,7 +1,6 @@
 #to reveal type
 print(type('string'))
-
-Out: <class ‘str’>
+#Out: <class ‘str’>
 
 #divides without including decimal
 //
