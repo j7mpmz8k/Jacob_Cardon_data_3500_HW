@@ -2,15 +2,12 @@
 print(type('string'))
 #Out: <class ‘str’>
 
-#divides without including decimal
-//
 #concatenates with a space
 ,
 #concatenates without a space
 +
 
-#prints new line
-\n
+"\n" #prints new line
 #prints with indented tab
 \t
 #prints second line into one continuous line

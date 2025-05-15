@@ -2,6 +2,12 @@
 float(3) 
 #Out: 3.0
 
+
+9//2 #divides while truncating remainder
+3**5 #3 to the power of 5
+9%2 #divides leaving only remainder
+
+
 #convert string to floating number as numbers input from user are strings
 number = ("3.0") #string
 number = eval(number)
