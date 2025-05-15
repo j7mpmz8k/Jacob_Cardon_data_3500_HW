@@ -2,16 +2,14 @@
 print(type('string'))
 #Out: <class ‘str’>
 
-#concatenates with a space
-,
-#concatenates without a space
-+
+
+, #concatenates with a space
+
++ #concatenates without a space
 
 "\n" #prints new line
-#prints with indented tab
-\t
-#prints second line into one continuous line
-\
+
+"\t" #prints with indented tab
 
 'string' = "string"
 #use \" inside double quotes for nested strings
