@@ -36,8 +36,3 @@ else:
 '''Out: 1
         2
         3'''
-
-#for loop through a string
-name = ("John")
-for i in name:
-	print("letter: ", i)

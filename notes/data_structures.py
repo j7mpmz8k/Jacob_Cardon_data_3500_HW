@@ -11,3 +11,23 @@ print(list(r))
 for i in range(0,4):
 	print(i)
 #Out: 0,1,2,3,4
+
+#for loop through a string
+name = ("John")
+for i in name:
+	print("letter: ", i)
+
+#for loop w/ list outputs each item in list
+colors = ["red", "blue", "green"]
+for i in colors:
+	print("color: ", i)
+
+
+#sum total of list & count of items in list
+grades = [50, 45, 48, 10]
+total = 0
+num_grades = 0
+for i in grades:
+	total += i
+	num_grades += 1
+	print(total,num_grades)
