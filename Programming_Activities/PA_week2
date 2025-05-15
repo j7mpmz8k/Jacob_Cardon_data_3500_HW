@@ -1,11 +1,51 @@
-#variable initialization
-apple_price = 2.50
-number_purchased = 12
-tax = 1.07
+# activity 1
+# apple_price = 2.50
+# number_purchased = 12
+# tax = 1.07
+# total_bill = apple_price * number_purchased * tax
+# if total_bill == 0:
+#     print("check inputs")
+# else:
+#     print("you purchased:", number_purchased, "apples for a total price of:", "$"+str(total_bill))
 
-#calculations & print
-total_bill = apple_price * number_purchased * tax
-if total_bill == 0:
-    print("check inputs")
-else:
-    print("you purchased:", number_purchased, "apples for a total price of:", total_bill)
+# activity 2
+# current_age = int(input("What is your current age? "))
+# desired_age = int(input("What age would you like to live to? "))
+# print("You have only", desired_age-current_age, "years to live!")
+
+# activity 3
+# grade = float(input("What is your grade in this class? "))
+# if grade >= 93:
+#     print("Congratulations you got an A!")
+# else:
+#     print("Congratulations, you still learned a ton!!!!")
+
+# activity 4
+# birth_year = float(input("What year were you born? "))
+# if birth_year >= 1997:
+#     print("You are a Zoomer")
+# elif birth_year >= 1981:
+#     print("You are a Millennial")
+# elif birth_year >= 1965:
+#     print("You are Gen X")
+# else:
+#     print("You are a Baby Boomer")
+
+# activity 5
+# age = int(input("What is your age? "))
+# current_year = int(2025)
+# calculated_year = current_year
+# while age > 1:
+#     print("You were", age, "years old in year:", calculated_year)
+#     age -= 1
+#     calculated_year -= 1
+
+# activity 6
+# for i in range(5,95,5):
+#     print(i)
+
+# activity 7
+# multiples = int(5)
+# while multiples <= int(95):
+#     print(multiples)
+#     multiples += int(5)
