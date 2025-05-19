@@ -2,6 +2,10 @@
 print(type('string'))
 #Out: <class ‘str’>
 
+print("Hello", end="") #unless specified, end parameter is set to \n by default after every output
+print("World")
+# Output: HelloWorld
+
 
 , #concatenates with a space
 
