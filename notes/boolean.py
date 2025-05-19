@@ -50,3 +50,29 @@ for row in range(3):
 	for col in range(4):
 		print(row*col, end=" ")
 	print()
+
+
+
+
+# break
+for i in range(4):
+    if i == 2:
+        break
+    print(i, "", end="")
+#Output: 0 1
+    
+print()
+# continue
+for i in range(4):
+    if i == 2:
+        continue
+    print(i, "", end="")
+#Output: 0 1 3 4
+   
+print()
+# continue
+for i in range(4):
+    if i > 2:
+        continue
+    print(i, "", end="") 
+#Output: 0 1 2
