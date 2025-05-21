@@ -69,7 +69,7 @@ if num < 10000 or num > 99999:#checks if input is 5 digits
 else:
     #variable initializing
     last_num = num % 10
-    rev_num = last_num#initialized with setting reversed number to the first last number
+    rev_num = last_num
     excluding_last_num = num
 
     for i in range(len(str(num))-1):#reduces iteration by 1 since reversed number was already initialized with the last digit
