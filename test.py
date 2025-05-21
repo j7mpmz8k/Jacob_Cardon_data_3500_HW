@@ -1,35 +1,14 @@
-min_length = 8
+num = int(input("Enter and integer between 7-10 digits: "))
+divisor = 10**(len(str(num))-1)#divides by a power of 10 with equal length to length of num minus one "0"
+temp_num = num
+excluding_right = temp_num #finds all numbers exluding the first number on the left
+first_num = temp_num // divisor #finds number on most left hand of input number
 
-character_length = False
-has_lowercase = False
-has_uppercase = False
-has_digit = False
-strong_password = False
-
-
-while strong_password != True:
-    password = input("\nEnter a new password: ")
-    for i in password:
-        if "a" <= i <= "z":
-            has_lowercase = True
-        if "A" <= i <= "Z":
-            has_uppercase = True
-        if "0" <= i <= "9":
-            has_digit = True
-    if len(password) >= min_length:
-        character_length = True
-
-    if has_lowercase and has_uppercase and has_digit and character_length:
-        print("\nSuccess! Password is strong.\n")
-        strong_password = True
-    else:
-        print("\nPassword is weak. Does not meet following criteria:")
-        if not has_lowercase:
-            print("\t-Needs lowercase character.")
-        if not has_uppercase:
-            print("\t-Needs uppercase character.")
-        if not has_digit:
-            print("\t-Needs at least one number ie. 0-9")
-        if not character_length:
-            print("\t-Character length must be at least", min_length, "characters.")
-        print("Please try again.")
+if len(str(num)) > 9 or len(str(num)) < 7:#makes sure input is 7-9 digits
+    print("Error: integer must be 7-10 digits")
+else:
+    for i in range(len(str(num))): #itterations equal to as many digits in input number
+        print(int(first_num))
+        excluding_right %= divisor #divide by divisor to find all numbers exluding furthest number to the left
+        first_num = excluding_right // (divisor/10) #divide divisor by 10 here to avoid division by zero error on last itteration
+        divisor //= 10 #decreases divisor by one less digit
