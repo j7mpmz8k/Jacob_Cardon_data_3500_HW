@@ -31,3 +31,8 @@ for i in grades:
 	total += i
 	num_grades += 1
 	print(total,num_grades)
+
+
+# Slice notation to reverse the string
+num_str = [3,4,5,2]
+reversed_str = num_str[::-1] # Slice notation to reverse the string

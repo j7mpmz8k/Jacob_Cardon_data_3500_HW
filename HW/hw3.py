@@ -13,16 +13,16 @@ for row in range(1,3):#sets up 2 rows
 num = int(input("Enter and integer between 7-10 digits: "))
 divisor = 10**(len(str(num))-1)#divides by a power of 10 with equal length to length of num minus one "0"
 temp_num = num
-excluding_right = temp_num #finds all numbers exluding the first number on the left
+excluding_left = temp_num #finds all numbers excluding the first number on the left
 first_num = temp_num // divisor #finds number on most left hand of input number
 
-if len(str(num)) > 9 or len(str(num)) < 7:#makes sure input is 7-9 digits
+if len(str(num)) > 10 or len(str(num)) < 7:#makes sure input is 7-10 digits
     print("Error: integer must be 7-10 digits")
 else:
-    for i in range(len(str(num))): #itterations equal to as many digits in input number
+    for i in range(len(str(num))): #iterations equal to as many digits in input number
         print(int(first_num))
-        excluding_right %= divisor #divide by divisor to find all numbers exluding furthest number to the left
-        first_num = excluding_right // (divisor/10) #divide divisor by 10 here to avoid division by zero error on last itteration
+        excluding_left %= divisor #divide by divisor to find all numbers excluding furthest number to the left
+        first_num = excluding_left // (divisor/10) #divide divisor by 10 here to avoid division by zero error on last iteration
         divisor //= 10 #decreases divisor by one less digit
 
 
@@ -33,7 +33,6 @@ else:
 gallons_total = 0
 gallons_trip = 0
 miles_total = 0
-miles_trip = 0
 
 log_status = 0#neutral flag for message loop
 
