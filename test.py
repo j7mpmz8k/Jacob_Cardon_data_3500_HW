@@ -1,25 +1,22 @@
-# 3.14 @ 119th iteration
-# 3.141 @ 1688th iteration
-# 3.141 twice @ 2454-2455
-
-neumerator = 4
-devisor = 1
-pi_iteration = neumerator/devisor
-pi = pi_iteration
-addition_iteration = False
+#inilization
+numerator = 4
+divisor = 1
+pi_iteration = numerator/divisor #not including previous iterations
+pi = pi_iteration #running full decimal calc of pi
+addition_iteration = False #flag to flip from addition to subtraction each iteration
 iteration_counter = 1
-previous_pi = pi
 
-def fraction_iteration():
-    return neumerator/devisor
-def pi_N_digits(A=pi,N=4):
-    return eval(str(A)[:N])
+def pi_N_digits(pi_var,N=4):
+    return eval(str(pi_var)[:N]) #truncates pi leaving N number of digits...used to break loop
+def Pi_print_iteration():
+    return print(str(iteration_counter)+":  +"+str(numerator)+"/"+str(divisor), "=", end=" ")
 
-for i in range(3000):
+for i in range(10000):
     previous_pi = pi
-    print(str(iteration_counter)+":  +"+str(neumerator)+"/"+str(devisor), "=", str(pi)[:5])
-    devisor += 2
-    pi_iteration = fraction_iteration()
+    Pi_print_iteration()
+    print(pi)
+    divisor += 2
+    pi_iteration = numerator/divisor
     if addition_iteration == True:
         pi = pi + pi_iteration
     else:
@@ -27,6 +24,7 @@ for i in range(3000):
     addition_iteration = not addition_iteration
     iteration_counter += 1
     
-    if pi_N_digits(pi,5) == pi_N_digits(previous_pi,5):
-        print(str(iteration_counter)+":  +"+str(neumerator)+"/"+str(devisor), "=", pi_N_digits(pi,5))
+    if pi_N_digits(pi,6) == pi_N_digits(previous_pi,6):
+        Pi_print_iteration()
+        print(pi)
         break
