@@ -29,11 +29,11 @@ def Pi_print_iteration():
         return print(str(iteration_counter)+":  +"+str(numerator)+"/"+str(divisor), "=", pi)
 
 #loop to calculate pi for each new iteration
-for i in range(30):
+for i in range(3000):
     previous_pi = pi#used to find double accurances of 3.141
     Pi_print_iteration()
     divisor += 2 #jumps to the next odd denominator for the next pi iteration
-    pi_iteration = numerator/divisor #recalculates current iteration
+    pi_iteration = numerator/divisor
 
     #condition to switch to + or -
     if addition_iteration == True: 
@@ -41,11 +41,11 @@ for i in range(30):
     else:
         pi -= pi_iteration
 
-    #flips each iteration to use - or +   
-    addition_iteration = not addition_iteration 
+       
+    addition_iteration = not addition_iteration #flips each iteration to use - or +
     iteration_counter += 1
     
     #statement to find where 3.141 occurs twice
     if pi_N_digits(pi,5) == pi_N_digits(previous_pi,5): #used to test if double accurance of 3.141 is found
         Pi_print_iteration()
-        break #found double accurance of 3.141...avoids scrolling endlessly through console
+        break
