@@ -47,6 +47,8 @@ log_status = 0
 def miles_per_gal():
     return miles_trip/gallons_trip
 def total_avg():
+    if gallons_total == 0:
+        return #prevents division by zero due to gallons_total being zero at first iteraton
     return miles_total/gallons_total
 
 #message loop to update gas/miles trip log
@@ -110,27 +112,35 @@ pi = pi_iteration #running full decimal calc of pi
 addition_iteration = False #flips from addition to subtraction each iteration
 iteration_counter = 1
 
+#truncates pi leaving N number of digits...used to break loop...avoids scrolling endlessly through console
 def pi_N_digits(pi_var,N=4):
-    return eval(str(pi_var)[:N]) #truncates pi leaving N number of digits...used to break loop...avoids scrolling endlessly through console
+    return eval(str(pi_var)[:N])
+
+#prints out the iteration number, + or - the iteration fraction, along with the running total of PI
 def Pi_print_iteration():
-    return print(str(iteration_counter)+":  +"+str(numerator)+"/"+str(divisor), "=", end=" ")#prints each iteration for visual clarity
+    if addition_iteration == True:
+        return print(str(iteration_counter)+":  -"+str(numerator)+"/"+str(divisor), "=", pi)
+    else:
+        return print(str(iteration_counter)+":  +"+str(numerator)+"/"+str(divisor), "=", pi)
 
 #loop to calculate pi for each new iteration
-for i in range(3000):
+for i in range(30):
     previous_pi = pi#used to find double accurances of 3.141
     Pi_print_iteration()
-    print(pi)
     divisor += 2 #jumps to the next odd denominator for the next pi iteration
     pi_iteration = numerator/divisor #recalculates current iteration
-    if addition_iteration == True: #condition to switch to + or -
-        pi += pi_iteration #sums previous iterations with current
+
+    #condition to switch to + or -
+    if addition_iteration == True: 
+        pi += pi_iteration
     else:
-        pi -= pi_iteration #subtracts previous iterations with current
-    addition_iteration = not addition_iteration #flips each iteration to use - or +
+        pi -= pi_iteration
+
+    #flips each iteration to use - or +   
+    addition_iteration = not addition_iteration 
     iteration_counter += 1
     
     #statement to find where 3.141 occurs twice
     if pi_N_digits(pi,5) == pi_N_digits(previous_pi,5): #used to test if double accurance of 3.141 is found
         Pi_print_iteration()
-        print(pi)
         break #found double accurance of 3.141...avoids scrolling endlessly through console

@@ -1,35 +1,34 @@
 '''
-3.14 @ 119th iteration
-3.141 @ 1688th iteration
-3.141 twice @ 2454-2455th iterations
+3.11
+Miles per gallon
+relies on updating balance each while loop iteration. Uses a break to end loop when sentinal is typed
 '''
-#inilization
-numerator = 4
-divisor = 1
-pi_iteration = numerator/divisor #not including previous iterations
-pi = pi_iteration #running full decimal calc of pi
-addition_iteration = False #flips from addition to subtraction each iteration
-iteration_counter = 1
+#initializing balances
+gallons_total = 0
+gallons_trip = 0
+miles_total = 0
 
-def pi_N_digits(pi_var,N=4):
-    return eval(str(pi_var)[:N]) #truncates pi leaving N number of digits...used to break loop...avoids scrolling endlessly through console
-def Pi_print_iteration():
-    return print(str(iteration_counter)+":  +"+str(numerator)+"/"+str(divisor), "=", end=" ")#prints each iteration for visual clarity
+#neutral flag for message loop
+log_status = 0
 
-for i in range(3000):
-    previous_pi = pi#used to find double accurances of 3.141
-    Pi_print_iteration()
-    print(pi)
-    divisor += 2 #jumps to the next odd denominator for the next pi iteration
-    pi_iteration = numerator/divisor
-    if addition_iteration == True: #condition to switch to + or -
-        pi += pi_iteration
+#avg calculations setup
+def miles_per_gal():
+    return miles_trip/gallons_trip
+def total_avg():
+    if gallons_total == 0:
+        return #prevents division by zero due to gallons_total being zero at first iteraton
+    return miles_total/gallons_total
+
+#message loop to update gas/miles trip log
+while log_status != -1:#sentinal
+    gallons_trip = int(input("Enter the gallons used (-1 to end): "))
+    log_status = gallons_trip#checking if gallons entered is sentinal
+    if log_status == -1:
+        break#backs out of the trip log
+    #continues trip log since sentinal was not entered
     else:
-        pi -= pi_iteration
-    addition_iteration = not addition_iteration #flips each iteration to use - or +
-    iteration_counter += 1
-    
-    if pi_N_digits(pi,5) == pi_N_digits(previous_pi,5): #used to test if double accurance of 3.141 is found
-        Pi_print_iteration()
-        print(pi)
-        break #found double accurance of 3.141...avoids scrolling endlessly through console
+        gallons_total += gallons_trip#adding gal used in trip to total
+        miles_trip = int(input("Enter the miles driven: "))
+        miles_total += miles_trip#adding miles used in trip to tal
+        print("\nThe miles/gallon for this tank was", miles_per_gal(), "\n")
+print("\nThe overall average miles/gallon was", total_avg(),"\n")#exit message w/total avg
