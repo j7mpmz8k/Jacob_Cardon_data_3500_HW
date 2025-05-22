@@ -11,6 +11,8 @@ for row in range(1,3):#sets up 2 rows
 '''
 3.9
 Seperating the Digits in an Integer
+Uses floor and modulo division against a divisor to truncate the first number.
+The divisor is as many digits as the input has which updates to be one less after each iteration as the input number is truncated each iteration in the for loop.
 '''
 num = int(input("Enter and integer between 7-10 digits: "))
 divisor = 10**(len(str(num))-1)#divides by a power of 10 with equal length to length of num minus one "0"
@@ -31,13 +33,15 @@ else:
 '''
 3.11
 Miles per gallon
+relies on updating balance each while loop iteration. Uses a break to end loop when sentinal is typed
 '''
 #initializing balances
 gallons_total = 0
 gallons_trip = 0
 miles_total = 0
 
-log_status = 0#neutral flag for message loop
+#neutral flag for message loop
+log_status = 0
 
 #avg calculations setup
 def miles_per_gal():
@@ -45,12 +49,13 @@ def miles_per_gal():
 def total_avg():
     return miles_total/gallons_total
 
-#message loop to update gas/miles tip log
+#message loop to update gas/miles trip log
 while log_status != -1:#sentinal
     gallons_trip = int(input("Enter the gallons used (-1 to end): "))
     log_status = gallons_trip#checking if gallons entered is sentinal
     if log_status == -1:
-        break
+        break#backs out of the trip log
+    #continues trip log since sentinal was not entered
     else:
         gallons_total += gallons_trip#adding gal used in trip to total
         miles_trip = int(input("Enter the miles driven: "))
@@ -62,7 +67,11 @@ print("\nThe overall average miles/gallon was", total_avg(),"\n")#exit message w
 '''
 3.12
 Palindrome
+-Uses a for loop which trancates the last number each iteration and then updating the left over number for the next iteration
+-I store a variable adding the last number to the end of it which flips the input integer backwards
+-If the backwards integer and the original are the same then it is a palindrome!
 '''
+#asks user and checks if input number is in fact 5 digets
 num = int(input("\nPlease enter a 5 digit number: "))
 if num < 10000 or num > 99999:#checks if input is 5 digits
     print("\nError: That is not a 5 digit number.\n")
@@ -71,7 +80,8 @@ else:
     last_num = num % 10
     rev_num = last_num
     excluding_last_num = num
-
+    
+    #for loop to find the reverse input integer
     for i in range(len(str(num))-1):#reduces iteration by 1 since reversed number was already initialized with the last digit
         excluding_last_num = excluding_last_num // 10#shaves off last number each iteration
         last_num = excluding_last_num % 10#finds last number each iteration
@@ -86,6 +96,11 @@ else:
 3.14 @ 119th iteration
 3.141 @ 1688th iteration
 3.141 twice @ 2454-2455th iterations
+-Uses a for loop to iterate many times, each iteration calculating each new fraction with prior fractions. 
+Uses an if statment to govern a bolean value to switch back and forth between addition and subtraction.
+-To avoid scrolling endlessly through terminal to find repeating iterations of 3.141...I truncated PI leaving only the first 3 digits after the decimal.
+I compare the truncated calculation with 3.141 and if not equal then the loop does not break until 3000 iterations have passes in the for loop
+-I print the iteration count, the fraction, and the running pi calculation in terminal
 '''
 #inilization
 numerator = 4
@@ -100,19 +115,21 @@ def pi_N_digits(pi_var,N=4):
 def Pi_print_iteration():
     return print(str(iteration_counter)+":  +"+str(numerator)+"/"+str(divisor), "=", end=" ")#prints each iteration for visual clarity
 
+#loop to calculate pi for each new iteration
 for i in range(3000):
     previous_pi = pi#used to find double accurances of 3.141
     Pi_print_iteration()
     print(pi)
     divisor += 2 #jumps to the next odd denominator for the next pi iteration
-    pi_iteration = numerator/divisor
+    pi_iteration = numerator/divisor #recalculates current iteration
     if addition_iteration == True: #condition to switch to + or -
-        pi = pi + pi_iteration
+        pi += pi_iteration #sums previous iterations with current
     else:
-        pi = pi - pi_iteration
+        pi -= pi_iteration #subtracts previous iterations with current
     addition_iteration = not addition_iteration #flips each iteration to use - or +
     iteration_counter += 1
     
+    #statement to find where 3.141 occurs twice
     if pi_N_digits(pi,5) == pi_N_digits(previous_pi,5): #used to test if double accurance of 3.141 is found
         Pi_print_iteration()
         print(pi)

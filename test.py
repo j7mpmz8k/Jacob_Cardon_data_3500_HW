@@ -23,9 +23,9 @@ for i in range(3000):
     divisor += 2 #jumps to the next odd denominator for the next pi iteration
     pi_iteration = numerator/divisor
     if addition_iteration == True: #condition to switch to + or -
-        pi = pi + pi_iteration
+        pi += pi_iteration
     else:
-        pi = pi - pi_iteration
+        pi -= pi_iteration
     addition_iteration = not addition_iteration #flips each iteration to use - or +
     iteration_counter += 1
     
