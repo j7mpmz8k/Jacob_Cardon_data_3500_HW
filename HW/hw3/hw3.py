@@ -117,6 +117,7 @@ def pi_N_digits(pi_var,N=4):
     return eval(str(pi_var)[:N])
 
 #prints out the iteration number, + or - the iteration fraction, along with the running total of PI
+# - or + logic is inversed due to boolean flag not updated yet
 def Pi_print_iteration():
     if addition_iteration == True:
         return print(str(iteration_counter)+":  -"+str(numerator)+"/"+str(divisor), "=", pi)
