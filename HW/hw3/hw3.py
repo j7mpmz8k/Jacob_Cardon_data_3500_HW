@@ -21,10 +21,12 @@ temp_num = num
 excluding_left = temp_num #finds all numbers excluding the first number on the left
 first_num = temp_num // divisor #finds number on most left hand of input number
 
-if len(str(num)) > 10 or len(str(num)) < 7:#makes sure input is 7-10 digits
+#makes sure input is 7-10 digits
+if len(str(num)) > 10 or len(str(num)) < 7:
     print("Error: integer must be 7-10 digits")
-else:
-    for i in range(len(str(num))): #iterations equal to as many digits in input number
+    
+else:#iterations equal to as many digits in input number
+    for i in range(len(str(num))): 
         print(int(first_num))
         excluding_left %= divisor #divide by divisor to find all numbers excluding furthest number to the left
         first_num = excluding_left // (divisor/10) #divide divisor by 10 here to avoid division by zero error on last iteration
@@ -132,7 +134,7 @@ for i in range(3000):
     divisor += 2 #jumps to the next odd denominator for the next pi iteration
     pi_iteration = numerator/divisor
 
-    #condition to switch to + or -
+    #condition to switch to + or - upating the running total of pi
     if addition_iteration_status == True: 
         pi += pi_iteration
     else:
