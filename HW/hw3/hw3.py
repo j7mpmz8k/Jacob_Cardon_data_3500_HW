@@ -1,6 +1,7 @@
 '''
 3.4
 Fill in the Missing Code
+prints 7col and 2row of @
 '''
 for row in range(1,3):#sets up 2 rows
     for col in range(1,8):#sets up 7 columns
