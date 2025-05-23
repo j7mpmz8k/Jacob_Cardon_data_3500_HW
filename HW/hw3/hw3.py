@@ -117,7 +117,14 @@ iteration_counter = 1
 
 #truncates pi leaving N number of digits...used to break loop...avoids scrolling endlessly through console
 def pi_N_digits(pi_var,N=4):
-    return eval(str(pi_var)[:N])
+    new_pi = 0
+    pi_var *= (10**(N-1))
+    for i in str(pi_var):
+        if i != ".":
+            new_pi = new_pi*10 + int(i)
+        else:
+            break
+    return new_pi
 
 #prints out the iteration number, + or - the iteration fraction, along with the running total of PI
 # - or + logic is inversed due to boolean flag not updated yet
