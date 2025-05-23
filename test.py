@@ -21,10 +21,10 @@ def pi_N_digits(pi_var,N=4):
     new_pi = 0
     pi_var *= (10**(N-1))
     for i in str(pi_var):
-        if i != ".":
-            new_pi = new_pi*10 + int(i)
-        else:
+        if i == ".":
             break
+        else:
+            new_pi = new_pi*10 + int(i)
     return new_pi
 
 #prints out the iteration number, + or - the iteration fraction, along with the running total of PI

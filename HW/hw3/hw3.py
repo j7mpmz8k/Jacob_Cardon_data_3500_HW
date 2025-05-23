@@ -120,10 +120,10 @@ def pi_N_digits(pi_var,N=4):
     new_pi = 0
     pi_var *= (10**(N-1))
     for i in str(pi_var):
-        if i != ".":
-            new_pi = new_pi*10 + int(i)
-        else:
+        if i == ".":
             break
+        else:
+            new_pi = new_pi*10 + int(i)
     return new_pi
 
 #prints out the iteration number, + or - the iteration fraction, along with the running total of PI
@@ -152,6 +152,6 @@ for i in range(3000):
     iteration_counter += 1
     
     #statement to find where 3.141 occurs twice
-    if pi_N_digits(pi,5) == pi_N_digits(previous_pi,5): #used to test if double accurance of 3.141 is found
+    if pi_N_digits(pi,4) == pi_N_digits(previous_pi,4): #used to test if double accurance of 3.141 is found
         Pi_print_iteration()
         break
