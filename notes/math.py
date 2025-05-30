@@ -3,9 +3,9 @@ float(3)
 #Out: 3.0
 
 
-9//2 #divides while truncating remainder
+9//2 #floor division while truncating remainder
 3**5 #3 to the power of 5
-9%2 #divides leaving only remainder
+9%2 #modulus division leaving only remainder
 
 #checks if number is even
 import random
