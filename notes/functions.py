@@ -6,7 +6,7 @@ print(raised_to_power_of_num_plus1(3, 2)) #(3^2)+1.....3 & 2 override 0 as defau
 
 
 
-'''custom function for anagram
+'''custom function for anagram    ie. hello & ohell
 if matching letter is found using "if value in list"... value is removed from list...if list is zero'''
 def isAnagram(word1, word2):
 
