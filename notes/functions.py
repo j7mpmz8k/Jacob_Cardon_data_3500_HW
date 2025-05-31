@@ -6,8 +6,9 @@ print(raised_to_power_of_num_plus1(3, 2)) #(3^2)+1.....3 & 2 override 0 as defau
 
 
 
-'''custom function for anagram'''
-def isAnagram(word1=None, word2=None):
+'''custom function for anagram
+if matching letter is found using "if value in list"... value is removed from list...if list is zero'''
+def isAnagram(word1, word2):
 
     #checks if both word size is the same
     if len(word1) != len(word2):
