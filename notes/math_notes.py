@@ -45,6 +45,8 @@ age *= 1
 import random
 print(random.randrange(1,4))# output: 1-3
 print(random.randint(1,4))# output: 1-4
+import numpy
+print(numpy.random.randint(1, 4, size=10))#output: 1-3 with array of 10 random numbers
 
 #math module(complete list at https://docs.python.org/3/library/math.html)
 import math# returns floats
@@ -53,3 +55,11 @@ math.floor(9.2)# rounds down
 math.fabs(-5)# absolute value
 math.sqrt(16)# squareroot
 math.fmod(7,4)# remainder, ie. 7/4=1 3/4...output: 3.0
+
+
+import time
+start_time = time.time()
+print("hello world")
+end_time = time.time()
+time_lapsed_seconds = end_time - start_time
+print("seconds to run script:", time_lapsed_seconds)
