@@ -94,3 +94,9 @@ for color in colors:
     print(color.rjust(max_length))#uses max_length variable to avoid right alighting too more than needed and adjust according to changes in list
     for letter in color:
         print(letter.rjust(max_length))
+
+#array's in numpy take less memory and faster than lists
+import numpy
+list_example = [0,1,2,3,4,5]
+np_array = numpy.array(list_example)
+print(np_array)
