@@ -95,8 +95,11 @@ for color in colors:
     for letter in color:
         print(letter.rjust(max_length))
 
-#array's in numpy take less memory and faster than lists
-import numpy
+
+#numpy arrays are faster than lists and take up less memory
+import numpy #aslo may include "as np to store numpy as variable" ie. import numpy as np
 list_example = [0,1,2,3,4,5]
-np_array = numpy.array(list_example)
-print(np_array)
+np_array = numpy.array(list_example)#output: [0 1 2 3 4 5]....note that there are no comma seperators
+
+array_of_zeros = numpy.zeros(100)#array of 100 zeros
+array_of_ones = numpy.ones(100)#array of 100 ones
