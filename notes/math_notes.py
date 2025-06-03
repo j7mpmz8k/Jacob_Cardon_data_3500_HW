@@ -45,7 +45,11 @@ age *= 1
 import random
 print(random.randrange(1,4))# output: 1-3
 print(random.randint(1,4))# output: 1-4
-import numpy
+
+
+import numpy# numpy includes its own random module
+print(numpy.random.rand(3))#outputs 3 random numbers 0-1
+print(numpy.random.rand(3,4))#outputs 3 rows, 4 collums, nums 0-1
 print(numpy.random.randint(1, 4, size=10))#output: 1-3 with array of 10 random numbers
 
 #math module(complete list at https://docs.python.org/3/library/math.html)
