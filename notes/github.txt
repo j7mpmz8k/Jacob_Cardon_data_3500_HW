@@ -1,7 +1,7 @@
 #Right click on your github repo in VS code and click open in integrated terminal
-'''
+
+
 git status
 git add .
 git commit -m "type something"
 git push
-'''
