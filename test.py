@@ -1,10 +1,5 @@
-import numpy
-import random
-
-randoms = []
-for i in range(10):
-    randoms.append(random.randint(1,50))
-print(randoms)
-
-rands = numpy.random.randint(50, size=10)
-print(rands)
+'''activity 1'''
+name = input("What is your name: ")
+color = input("What is your favorite color? ")
+with open("PA_week5_activity1.txt", "w") as name_and_color:
+    name_and_color.write(name,"\n", color)
