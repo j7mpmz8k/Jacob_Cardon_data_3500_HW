@@ -4,8 +4,5 @@ ls #shows all file names in directory
 
 pwd #returns active working directory
 
-apt install python3-numpy -y
-/home/crostini/Github/Jacob_Cardon_data_3500_HW/.venv
-
 source .venv/bin/activate
 deactivate
