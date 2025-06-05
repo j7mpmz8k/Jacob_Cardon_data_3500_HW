@@ -19,6 +19,7 @@ total_profit = 0
 buy = 0
 first_buy = 0
 
+print("\nTSLA Mean Reversion Strategy Output: Mar18,2024 - Mar17,2025")
 #calculates buy/sell conditions and indidual trade profits
 for day, price in enumerate(prices):# keeps track of index position of each day and price value
     if day > 5:# ensures at least 5 days have past till 5day average calculates
