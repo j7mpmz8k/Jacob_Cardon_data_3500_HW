@@ -40,9 +40,11 @@ for day, price in enumerate(prices):# keeps track of index position of each day 
             print("\nbuy at:\t\t$",price)
             buy = price# updates stock inventory to current purchase
 
+#calculates ROI % 
+final_profit_percentage = round((total_profit/first_buy)*100,2)
 
 #prints final totals of profits and returns of a year of trade history         
 print("-"*24)#creates a line for formatting
 print("total profits:\t"+"$",round(total_profit,2))
 print("first buy:\t"+"$",first_buy)
-print("percent return:\t"+"%",round((total_profit/first_buy)*100,2),"\n")
+print("percent return:\t"+"%",final_profit_percentage,"\n")
