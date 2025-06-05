@@ -13,6 +13,7 @@ def last_5day_avg_from(day=0):
 
 total_profit = 0
 buy = 0
+first_buy = 0
 for day, price in enumerate(prices):
     if day < 6:
         None
@@ -22,9 +23,13 @@ for day, price in enumerate(prices):
             total_profit += trade_profits
             print("day:",day+1, "sell at", "$"+str(price))
             print("trade profits:", "$"+str(trade_profits), "\n")
+            if first_buy == 0:
+                first_buy = buy
             buy = 0
         elif price < last_5day_avg_from(day)*0.98 and buy == 0:
             print("day:",day+1, "buy at", "$"+str(price))
             buy = price
 print("-"*20,end="\n")
 print("total profits", "$"+str(total_profit))
+print("first buy", "$"+str(first_buy))
+print("percent return:", "%"+str(round((total_profit/first_buy)*100,2)))
