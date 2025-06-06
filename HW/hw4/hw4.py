@@ -1,7 +1,7 @@
 with open("/home/ubuntu/Jacob_Cardon_data_3500_HW/HW/hw4/TSLA.txt") as tsla_file: #mar18,2024 - mar17,2025....matching example given in HW4
     lines = tsla_file.read().split()# converts to a list
 
-# sets each price value to a float rounted to two decimal places
+# sets each price value to a float rounded to two decimal places
 prices = [round(float(line),2) for line in lines]
 
 
@@ -20,14 +20,14 @@ buy = 0
 first_buy = 0
 
 print("\nTSLA Mean Reversion Strategy Output: Mar18,2024 - Mar17,2025")
-#calculates buy/sell conditions and indidual trade profits
+#calculates buy/sell conditions and individual trade profits
 for day, price in enumerate(prices):# keeps track of index position of each day and price value
     if day > 5:# ensures at least 5 days have past till 5day average calculates
 
         #ensures today's price is at least 2% less than last 5 day moving avg
         #AND not to double up on stock inventory
         if price > last_5day_avg_from(day)*1.02 and buy != 0:#sell conditions
-            trade_profits = round(price - buy,2)#intiates purchase of stock
+            trade_profits = round(price - buy,2)#initiates purchase of stock
             total_profit += trade_profits#adds to total profits
             print("sell at:\t$",price)
             print("trade profits:\t$",trade_profits)
