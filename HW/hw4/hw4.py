@@ -48,4 +48,4 @@ final_profit_percentage = round((total_profit/first_buy)*100,2)
 print("-"*24)#creates a line for formatting
 print("total profits:\t"+"$",round(total_profit,2))
 print("first buy:\t"+"$",first_buy)
-print("percent return:\t"+"%",final_profit_percentage,"\n")
+print("percent return:\t",str(final_profit_percentage)+"%","\n")
