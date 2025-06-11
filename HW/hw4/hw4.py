@@ -1,4 +1,4 @@
-with open("/home/ubuntu/Jacob_Cardon_data_3500_HW/HW/hw4/TSLA.txt") as tsla_file: #mar18,2024 - mar17,2025....matching example given in HW4
+with open("/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw4/TSLA.txt") as tsla_file: #mar18,2024 - mar17,2025....matching example given in HW4
     lines = tsla_file.read().split()# converts to a list
 
 # sets each price value to a float rounded to two decimal places
