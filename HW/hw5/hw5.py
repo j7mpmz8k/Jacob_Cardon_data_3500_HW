@@ -1,10 +1,12 @@
 import json
 
+
 def import_stock(file_name):
-    directory_path = "/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw4/"
+    directory_path = "/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw5/"
     with open(directory_path+file_name) as stock_file: #mar18,2024 - mar17,2025....matching example given in HW4
         lines = stock_file.read().split()# converts to a list
         lines = [round(float(line),2) for line in lines]# sets each price value to a float rounded to two decimal places
+    ticker = find_ticker(file_name)
     return lines
 
 
@@ -17,13 +19,13 @@ def last_5day_avg_from(stock_prices, day=0):
     return sum(stock_prices[day1:day5])/5
 
 
-def meanReversionStrategey(Ticker, stock_prices):
+def meanReversionStrategey(ticker, stock_prices):
     #initialization for transaction history analytics
     total_profit = 0
     buy = 0
     first_buy = 0
 
-    print("\n"+Ticker,"Mean Reversion Strategy Output: Mar18,2024 - Mar17,2025")
+    print("\n"+ticker,"Mean Reversion Strategy Output: Mar18,2024 - Mar17,2025")
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(stock_prices):# keeps track of index position of each day and price value
         if day > 5:# ensures at least 5 days have past till 5day average calculates
@@ -57,13 +59,13 @@ def meanReversionStrategey(Ticker, stock_prices):
     return stock_prices, total_profit, final_profit_percentage
 
 
-def simpleMovingAverageStrategy(Ticker, stock_prices):
+def simpleMovingAverageStrategy(ticker, stock_prices):
     #initialization for transaction history analytics
     total_profit = 0
     buy = 0
     first_buy = 0
 
-    print("\n"+Ticker,"Simple Moving Average Strategy Output: Mar18,2024 - Mar17,2025")
+    print("\n"+ticker,"Simple Moving Average Strategy Output: Mar18,2024 - Mar17,2025")
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(stock_prices):# keeps track of index position of each day and price value
         if day > 5:# ensures at least 5 days have past till 5day average calculates
@@ -96,21 +98,33 @@ def simpleMovingAverageStrategy(Ticker, stock_prices):
     print("percent return:\t",final_profit_percentage,"\n")
     return stock_prices, total_profit, final_profit_percentage
 
+def find_ticker(file):
+    ticker = ""
+    for char in file:
+        if char == ".":
+            break
+        ticker += char
+    return ticker
 
 returns = {}
-def send_to_json(Ticker, stock_prices):
-    prices, mr_profit, mr_returns = meanReversionStrategey(Ticker, stock_prices)
-    prices, sma_profit, sma_returns = simpleMovingAverageStrategy(Ticker, stock_prices)
-    returns[Ticker+"_prices"] = prices
-    returns[Ticker+"_mr_profit"] = mr_profit
-    returns[Ticker+"_mr_returns"] = mr_returns
-    returns[Ticker+"_sma_profit"] = sma_profit
-    returns[Ticker+"_sma_returns"] = sma_returns
+def send_to_json(ticker, stock_prices):
+    prices, mr_profit, mr_returns = meanReversionStrategey(ticker, stock_prices)
+    prices, sma_profit, sma_returns = simpleMovingAverageStrategy(ticker, stock_prices)
+    returns[ticker+"_prices"] = prices
+    returns[ticker+"_mr_profit"] = mr_profit
+    returns[ticker+"_mr_returns"] = mr_returns
+    returns[ticker+"_sma_profit"] = sma_profit
+    returns[ticker+"_sma_returns"] = sma_returns
 
+#----------------------------------------------------------------------------------------------------
 
-tsla_prices = import_stock("TSLA.txt")
+# 1. Create a list of all your stock filenames
+stock_files = ["AAPL.txt", "META.txt", "AMZN.txt", "COIN.txt", "GOOG.txt", "HOOD.txt", "NVDA.txt", "TSLA.txt", "VOO.txt"]
 
+for file_name in stock_files:
+    ticker = find_ticker(file_name)
+    prices = import_stock(file_name)
+    send_to_json(ticker, prices)
 
-
-
-send_to_json("TSLA",tsla_prices)
+with open("stock_analysis_results.json", "w") as f:
+    json.dump(returns, f, indent=1)
