@@ -26,7 +26,7 @@ def import_stock(file_name):
 "ticker" -->(import_stock-->find_ticker)-->send_to_dictionary-->meanReversionStrategey or simpleMovingAverageStrategy-->send_to_dictionary
 '''
 
-#calculates previous "N_days" moving average along with error preventions ensuring "N_days are available to calculate
+#calculates previous "N_days" moving average along with error preventions ensuring "N_days" are available to calculate
 #pulls price data passed down from functions
 def last_N_day_avg_from(prices, N_days, day=0):
     dayN = day
@@ -48,7 +48,7 @@ def meanReversionStrategey(ticker, prices):
     print('\n'+ticker,'Mean Reversion Strategy Output:', date_range)
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
-        if day > N_days:# ensures at least "N_days" have past till 5day average calculates
+        if day > N_days:# ensures at least "N_days" have past till "N_days" average calculates
 
             #ensures today's price is at least 2% less than last "N_days" moving avg
             #AND not to double up on stock inventory
@@ -90,7 +90,7 @@ def simpleMovingAverageStrategy(ticker, prices):
     print('\n'+ticker,'Simple Moving Average Strategy Output:',date_range)
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
-        if day > N_days:# ensures at least "N_days" days have past till 5day average calculates
+        if day > N_days:# ensures at least "N_days" days have past till "N_days" average calculates
 
             #ensures today's price is less than last "N_days" moving avg
             #AND not to double up on stock inventory
