@@ -89,7 +89,7 @@ def simpleMovingAverageStrategy(ticker, prices):
 
             #ensures today's price is less than last 5 day moving avg
             #AND not to double up on stock inventory
-            if price > last_5day_avg_from(prices, day) and buy != 0:#sell conditions
+            if price < last_5day_avg_from(prices, day) and buy != 0:#sell conditions
                 trade_profits = round(price - buy,2)#initiates purchase of stock
                 total_profit += trade_profits#adds to total profits
                 print('sell at:\t$',price)
@@ -100,7 +100,7 @@ def simpleMovingAverageStrategy(ticker, prices):
 
             #ensures today's price is greater than last 5 day moving avg
             # AND not to double up on stock inventory
-            elif price < last_5day_avg_from(prices, day) and buy == 0:#buy conditions
+            elif price > last_5day_avg_from(prices, day) and buy == 0:#buy conditions
                 print('\nbuy at:\t\t$',price)
                 buy = price# updates stock inventory to current purchase
 
