@@ -97,6 +97,16 @@ def simpleMovingAverageStrategy(stock_prices):
 
 
 
-def send_to_json(stock_prices):
-    mrs_prices, mrs_profit, mrs_returns = meanReversionStrategey(stock_prices)
+def send_to_json(Ticker, stock_prices):
+    mr_prices, mr_profit, mr_returns = meanReversionStrategey(stock_prices)
     sma_prices, sma_profit, sma_returns = simpleMovingAverageStrategy(stock_prices)
+    returns = {}
+    returns[mr_prices] = Ticker+"_mr_prices"
+    returns[mr_profit] = Ticker+"_mr_profit"
+    returns[mr_returns] = Ticker+"_mr_returns"
+    returns[sma_prices] = Ticker+"_sma_prices"
+    returns[sma_profit] = Ticker+"_sma_profit"
+    returns[sma_returns] = Ticker+"_sma_returns"
+    print(returns)
+
+send_to_json("TSLA",prices)
