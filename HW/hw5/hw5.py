@@ -1,7 +1,8 @@
 import json
 
-def import_stock(file_path):
-    with open(file_path) as stock_file: #mar18,2024 - mar17,2025....matching example given in HW4
+def import_stock(file_name):
+    directory_path = "/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw4/"
+    with open(directory_path+file_name) as stock_file: #mar18,2024 - mar17,2025....matching example given in HW4
         lines = stock_file.read().split()# converts to a list
         lines = [round(float(line),2) for line in lines]# sets each price value to a float rounded to two decimal places
     return lines
@@ -98,18 +99,16 @@ def simpleMovingAverageStrategy(Ticker, stock_prices):
 
 returns = {}
 def send_to_json(Ticker, stock_prices):
-    mr_prices, mr_profit, mr_returns = meanReversionStrategey(Ticker, stock_prices)
-    sma_prices, sma_profit, sma_returns = simpleMovingAverageStrategy(Ticker, stock_prices)
-    returns[Ticker+"_mr_prices"] = mr_prices
+    prices, mr_profit, mr_returns = meanReversionStrategey(Ticker, stock_prices)
+    prices, sma_profit, sma_returns = simpleMovingAverageStrategy(Ticker, stock_prices)
+    returns[Ticker+"_prices"] = prices
     returns[Ticker+"_mr_profit"] = mr_profit
     returns[Ticker+"_mr_returns"] = mr_returns
-    returns[Ticker+"_sma_prices"] = sma_prices
     returns[Ticker+"_sma_profit"] = sma_profit
     returns[Ticker+"_sma_returns"] = sma_returns
 
 
-
-tsla_prices = import_stock("/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw4/TSLA.txt")
+tsla_prices = import_stock("TSLA.txt")
 
 
 
