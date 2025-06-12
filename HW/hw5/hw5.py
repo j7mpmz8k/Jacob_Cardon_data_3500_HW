@@ -1,6 +1,7 @@
 import json
 directory_path = '/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw5/'
 
+
 def import_stock(file_name):
     with open(directory_path+file_name) as stock_file: #mar18,2024 - mar17,2025....matching example given in HW4
         lines = stock_file.read().split()# converts to a list
@@ -97,6 +98,7 @@ def simpleMovingAverageStrategy(ticker, prices):
     print('percent return:\t',final_profit_percentage,'\n')
     return prices, total_profit, final_profit_percentage
 
+
 def find_ticker(file):
     ticker = ''
     for char in file:
@@ -107,7 +109,7 @@ def find_ticker(file):
 
 
 returns = {}
-def send_to_json(ticker, prices):
+def send_to_dictonary(ticker, prices):
     prices, mr_profit, mr_returns = meanReversionStrategey(ticker, prices)
     prices, sma_profit, sma_returns = simpleMovingAverageStrategy(ticker, prices)
     returns[ticker+'_prices'] = prices
@@ -128,6 +130,6 @@ stock_files = ['AAPL.txt', 'ADBE.txt', 'META.txt', 'AMZN.txt', 'COIN.txt', 'GOOG
 for file_name in stock_files:
     ticker = find_ticker(file_name)
     prices = import_stock(file_name)
-    send_to_json(ticker, prices)
+    send_to_dictonary(ticker, prices)
 
 saveResults(returns)
