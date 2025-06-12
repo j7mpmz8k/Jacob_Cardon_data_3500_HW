@@ -68,7 +68,10 @@ def meanReversionStrategey(ticker, prices):
                 buy = price# updates stock inventory to current purchase
 
     #calculates ROI % 
-    final_profit_percentage = str(round((total_profit/first_buy)*100,2))+'%'
+    try:
+        final_profit_percentage = str(round((total_profit/first_buy)*100,2))+'%'
+    except:
+        final_profit_percentage = "0.00%"
     total_profit = round(total_profit,2)
 
     #prints final totals of profits and returns of a year of trade history         
@@ -110,7 +113,10 @@ def simpleMovingAverageStrategy(ticker, prices):
                 buy = price# updates stock inventory to current purchase
 
     #calculates ROI % 
-    final_profit_percentage = str(round((total_profit/first_buy)*100,2))+'%'
+    try:
+        final_profit_percentage = str(round((total_profit/first_buy)*100,2))+'%'
+    except:
+        final_profit_percentage = "0.00%"
     total_profit = round(total_profit,2)
 
     #prints final totals of profits and returns of a year of trade history         

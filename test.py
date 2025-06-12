@@ -38,8 +38,8 @@ def last_N_day_avg_from(prices, N_days, day=0):
 
 # calculates & prints trading stratagy with at 2% difference from "N_days" moving average
 def meanReversionStrategey(ticker, prices):
-    N_days = 5# executes strategy over Nth number of days
-    
+    N_days = 200# executes strategy over Nth number of days
+
     #initialization for transaction history analytics
     total_profit = 0
     buy = 0
@@ -68,7 +68,10 @@ def meanReversionStrategey(ticker, prices):
                 buy = price# updates stock inventory to current purchase
 
     #calculates ROI % 
-    final_profit_percentage = str(round((total_profit/first_buy)*100,2))+'%'
+    try:
+        final_profit_percentage = str(round((total_profit/first_buy)*100,2))+'%'
+    except:
+        final_profit_percentage = "0%"
     total_profit = round(total_profit,2)
 
     #prints final totals of profits and returns of a year of trade history         
@@ -80,7 +83,7 @@ def meanReversionStrategey(ticker, prices):
 
 # calculates & prints trading stratagy with any difference from "N_days" moving average inversed from meanReversionStrategey
 def simpleMovingAverageStrategy(ticker, prices):
-    N_days = 50# executes strategy over Nth number of days
+    N_days = 200# executes strategy over Nth number of days
 
     #initialization for transaction history analytics
     total_profit = 0
@@ -110,7 +113,10 @@ def simpleMovingAverageStrategy(ticker, prices):
                 buy = price# updates stock inventory to current purchase
 
     #calculates ROI % 
-    final_profit_percentage = str(round((total_profit/first_buy)*100,2))+'%'
+    try:
+        final_profit_percentage = str(round((total_profit/first_buy)*100,2))+'%'
+    except:
+        final_profit_percentage = "0%"
     total_profit = round(total_profit,2)
 
     #prints final totals of profits and returns of a year of trade history         
@@ -147,3 +153,29 @@ for file_name in stock_files:
 
 #writes saved dictionary to results.json file to directory path variable
 saveResults(returns)
+
+list_of_keys = [
+'AAPL_mr_returns',
+'AAPL_sma_returns',
+'ADBE_mr_returns',
+'ADBE_sma_returns',
+'META_mr_returns',
+'META_sma_returns',
+'AMZN_mr_returns',
+'AMZN_sma_returns',
+'COIN_mr_returns',
+'COIN_sma_returns',
+'GOOG_mr_returns',
+'GOOG_sma_returns',
+'HOOD_mr_returns',
+'HOOD_sma_returns',
+'NVDA_mr_returns',
+'NVDA_sma_returns',
+'TSLA_mr_returns',
+'TSLA_sma_returns',
+'VOO_mr_returns',
+'VOO_sma_returns'
+]
+
+for key in list_of_keys:
+    print(key, returns[key])
