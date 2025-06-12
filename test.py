@@ -38,7 +38,7 @@ def last_N_day_avg_from(prices, N_days, day=0):
 
 # calculates & prints trading stratagy with at 2% difference from "N_days" moving average
 def meanReversionStrategey(ticker, prices):
-    N_days = 200# executes strategy over Nth number of days
+    N_days = 50# executes strategy over Nth number of days
 
     #initialization for transaction history analytics
     total_profit = 0
@@ -83,7 +83,7 @@ def meanReversionStrategey(ticker, prices):
 
 # calculates & prints trading stratagy with any difference from "N_days" moving average inversed from meanReversionStrategey
 def simpleMovingAverageStrategy(ticker, prices):
-    N_days = 200# executes strategy over Nth number of days
+    N_days = 50# executes strategy over Nth number of days
 
     #initialization for transaction history analytics
     total_profit = 0
