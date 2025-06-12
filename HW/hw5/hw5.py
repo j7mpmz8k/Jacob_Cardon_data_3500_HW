@@ -1,10 +1,10 @@
 import json
 
-with open("/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw4/TSLA.txt") as tsla_file: #mar18,2024 - mar17,2025....matching example given in HW4
-    lines = tsla_file.read().split()# converts to a list
-
-# sets each price value to a float rounded to two decimal places
-prices = [round(float(line),2) for line in lines]
+def import_stock(file_path):
+    with open(file_path) as stock_file: #mar18,2024 - mar17,2025....matching example given in HW4
+        lines = stock_file.read().split()# converts to a list
+        lines = [round(float(line),2) for line in lines]# sets each price value to a float rounded to two decimal places
+    return lines
 
 
 #calculates previous 5 day moving average along with error preventions ensuring 5 days are available to calculate
@@ -15,13 +15,14 @@ def last_5day_avg_from(stock_prices, day=0):
         return print("\nERROR! Day must be no less than 5, and no more than", len(stock_prices), "\n")
     return sum(stock_prices[day1:day5])/5
 
-def meanReversionStrategey(stock_prices):
+
+def meanReversionStrategey(Ticker, stock_prices):
     #initialization for transaction history analytics
     total_profit = 0
     buy = 0
     first_buy = 0
 
-    print("\nTSLA Mean Reversion Strategy Output: Mar18,2024 - Mar17,2025")
+    print("\n"+Ticker,"Mean Reversion Strategy Output: Mar18,2024 - Mar17,2025")
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(stock_prices):# keeps track of index position of each day and price value
         if day > 5:# ensures at least 5 days have past till 5day average calculates
@@ -55,14 +56,13 @@ def meanReversionStrategey(stock_prices):
     return stock_prices, total_profit, final_profit_percentage
 
 
-
-def simpleMovingAverageStrategy(stock_prices):
+def simpleMovingAverageStrategy(Ticker, stock_prices):
     #initialization for transaction history analytics
     total_profit = 0
     buy = 0
     first_buy = 0
 
-    print("\nTSLA Mean Reversion Strategy Output: Mar18,2024 - Mar17,2025")
+    print("\n"+Ticker,"Simple Moving Average Strategy Output: Mar18,2024 - Mar17,2025")
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(stock_prices):# keeps track of index position of each day and price value
         if day > 5:# ensures at least 5 days have past till 5day average calculates
@@ -96,17 +96,22 @@ def simpleMovingAverageStrategy(stock_prices):
     return stock_prices, total_profit, final_profit_percentage
 
 
-
+returns = {}
 def send_to_json(Ticker, stock_prices):
-    mr_prices, mr_profit, mr_returns = meanReversionStrategey(stock_prices)
-    sma_prices, sma_profit, sma_returns = simpleMovingAverageStrategy(stock_prices)
-    returns = {}
-    returns[mr_prices] = Ticker+"_mr_prices"
-    returns[mr_profit] = Ticker+"_mr_profit"
-    returns[mr_returns] = Ticker+"_mr_returns"
-    returns[sma_prices] = Ticker+"_sma_prices"
-    returns[sma_profit] = Ticker+"_sma_profit"
-    returns[sma_returns] = Ticker+"_sma_returns"
-    print(returns)
+    mr_prices, mr_profit, mr_returns = meanReversionStrategey(Ticker, stock_prices)
+    sma_prices, sma_profit, sma_returns = simpleMovingAverageStrategy(Ticker, stock_prices)
+    returns[Ticker+"_mr_prices"] = mr_prices
+    returns[Ticker+"_mr_profit"] = mr_profit
+    returns[Ticker+"_mr_returns"] = mr_returns
+    returns[Ticker+"_sma_prices"] = sma_prices
+    returns[Ticker+"_sma_profit"] = sma_profit
+    returns[Ticker+"_sma_returns"] = sma_returns
 
-send_to_json("TSLA",prices)
+
+
+tsla_prices = import_stock("/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw4/TSLA.txt")
+
+
+
+
+send_to_json("TSLA",tsla_prices)
