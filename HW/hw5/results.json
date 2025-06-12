@@ -253,8 +253,8 @@
     ],
     "AAPL_mr_profit": 1.17,
     "AAPL_mr_returns": "0.56%",
-    "AAPL_sma_profit": -6.63,
-    "AAPL_sma_returns": "-3.11%",
+    "AAPL_sma_profit": -23.62,
+    "AAPL_sma_returns": "-10.4%",
     "ADBE_prices": [
         459.87,
         458.74,
@@ -509,8 +509,8 @@
     ],
     "ADBE_mr_profit": -71.06,
     "ADBE_mr_returns": "-12.74%",
-    "ADBE_sma_profit": -42.12,
-    "ADBE_sma_returns": "-7.9%",
+    "ADBE_sma_profit": -107.22,
+    "ADBE_sma_returns": "-19.17%",
     "META_prices": [
         508.84,
         504.1,
@@ -765,8 +765,8 @@
     ],
     "META_mr_profit": 92.46,
     "META_mr_returns": "18.03%",
-    "META_sma_profit": 131.41,
-    "META_sma_returns": "25.74%",
+    "META_sma_profit": 14.4,
+    "META_sma_returns": "2.76%",
     "AMZN_prices": [
         186.89,
         183.83,
@@ -1021,8 +1021,8 @@
     ],
     "AMZN_mr_profit": 19.68,
     "AMZN_mr_returns": "10.09%",
-    "AMZN_sma_profit": -26.25,
-    "AMZN_sma_returns": "-13.88%",
+    "AMZN_sma_profit": 42.13,
+    "AMZN_sma_returns": "22.83%",
     "COIN_prices": [
         254.96,
         247.64,
@@ -1277,8 +1277,8 @@
     ],
     "COIN_mr_profit": 93.35,
     "COIN_mr_returns": "41.33%",
-    "COIN_sma_profit": -138.95,
-    "COIN_sma_returns": "-62.03%",
+    "COIN_sma_profit": -8.96,
+    "COIN_sma_returns": "-4.56%",
     "GOOG_prices": [
         179.56,
         176.74,
@@ -1533,8 +1533,8 @@
     ],
     "GOOG_mr_profit": 7.85,
     "GOOG_mr_returns": "4.3%",
-    "GOOG_sma_profit": -18.51,
-    "GOOG_sma_returns": "-10.27%",
+    "GOOG_sma_profit": 4.52,
+    "GOOG_sma_returns": "2.73%",
     "HOOD_prices": [
         23.7,
         23.31,
@@ -1789,8 +1789,8 @@
     ],
     "HOOD_mr_profit": 12.49,
     "HOOD_mr_returns": "58.45%",
-    "HOOD_sma_profit": 40.31,
-    "HOOD_sma_returns": "182.07%",
+    "HOOD_sma_profit": 18.0,
+    "HOOD_sma_returns": "84.27%",
     "NVDA_prices": [
         125.2,
         129.61,
@@ -2045,8 +2045,8 @@
     ],
     "NVDA_mr_profit": 35.58,
     "NVDA_mr_returns": "28.11%",
-    "NVDA_sma_profit": 10.71,
-    "NVDA_sma_returns": "8.62%",
+    "NVDA_sma_profit": -30.75,
+    "NVDA_sma_returns": "-24.32%",
     "TSLA_prices": [
         177.29,
         182.47,
@@ -2301,8 +2301,8 @@
     ],
     "TSLA_mr_profit": 105.56,
     "TSLA_mr_returns": "43.8%",
-    "TSLA_sma_profit": 23.5,
-    "TSLA_sma_returns": "12.84%",
+    "TSLA_sma_profit": 83.96,
+    "TSLA_sma_returns": "36.48%",
     "VOO_prices": [
         497.64,
         498.58,
@@ -2557,6 +2557,6 @@
     ],
     "VOO_mr_profit": 11.17,
     "VOO_mr_returns": "2.25%",
-    "VOO_sma_profit": 8.15,
-    "VOO_sma_returns": "1.62%"
+    "VOO_sma_profit": 0.4,
+    "VOO_sma_returns": "0.08%"
 }

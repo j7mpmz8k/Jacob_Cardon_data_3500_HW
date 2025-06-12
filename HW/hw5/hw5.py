@@ -1,5 +1,5 @@
 import json
-directory_path = '/home/ubuntu/Jacob_Cardon_data_3500_HW/HW/hw5/'#used for both read and write directory
+directory_path = '/home/Ubuntu/Jacob_Cardon_data_3500_HW/HW/hw5/'#used for both read and write directory
 stock_files = ['AAPL.txt', 'ADBE.txt', 'META.txt', 'AMZN.txt', 'COIN.txt', 'GOOG.txt', 'HOOD.txt', 'NVDA.txt', 'TSLA.txt', 'VOO.txt']
 date_range = "12Jun24-11Jun25"# one year of data for files pre-sorted with oldest at the top, newest at the bottom
 
@@ -22,21 +22,24 @@ def import_stock(file_name):
     return ticker, prices
 
 ''' Abstraction layers of "ticker" and "prices" returned
-"prices" -->import_stock-->send_to_dictionary-->(meanReversionStrategey or simpleMovingAverageStrategy-->last_5day_avg_from)-->send_to_dictionary
+"prices" -->import_stock-->send_to_dictionary-->(meanReversionStrategey or simpleMovingAverageStrategy-->last_N_day_avg_from)-->send_to_dictionary
 "ticker" -->(import_stock-->find_ticker)-->send_to_dictionary-->meanReversionStrategey or simpleMovingAverageStrategy-->send_to_dictionary
 '''
 
 #calculates previous 5 day moving average along with error preventions ensuring 5 days are available to calculate
 #pulls price data passed down from functions
-def last_5day_avg_from(prices, day=0):
-    day5 = day
-    day1 = day-5
+def last_N_day_avg_from(prices, N_days, day=0):
+    dayN = day
+    day1 = day-N_days
     if day1 < 0:
-        return print('\nERROR! Day must be no less than 5, and no more than', len(prices), '\n')
-    return sum(prices[day1:day5])/5
+        return print('\nERROR! Day must be no less than', N_days, 'and no more than', len(prices), '\n')
+    return sum(prices[day1:dayN])/N_days
 
-# calculates & prints trading stratagy with at 2% difference from 5 day moving average
+
+# calculates & prints trading stratagy with at 2% difference from "N_days" moving average
 def meanReversionStrategey(ticker, prices):
+    N_days = 5# executes strategy over Nth number of days
+    
     #initialization for transaction history analytics
     total_profit = 0
     buy = 0
@@ -45,11 +48,11 @@ def meanReversionStrategey(ticker, prices):
     print('\n'+ticker,'Mean Reversion Strategy Output:', date_range)
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
-        if day > 5:# ensures at least 5 days have past till 5day average calculates
+        if day > N_days:# ensures at least "N_days" have past till 5day average calculates
 
-            #ensures today's price is at least 2% less than last 5 day moving avg
+            #ensures today's price is at least 2% less than last "N_days" moving avg
             #AND not to double up on stock inventory
-            if price > last_5day_avg_from(prices, day)*1.02 and buy != 0:#sell conditions
+            if price > last_N_day_avg_from(prices, N_days, day)*1.02 and buy != 0:#sell conditions
                 trade_profits = round(price - buy,2)#initiates purchase of stock
                 total_profit += trade_profits#adds to total profits
                 print('sell at:\t$',price)
@@ -58,9 +61,9 @@ def meanReversionStrategey(ticker, prices):
                     first_buy = buy# keeps track of price of first purchase for return on investment
                 buy = 0# resets stock inventory to zero
 
-            #ensures today's price is at least 2% greater than last 5 day moving avg
+            #ensures today's price is at least 2% greater than last "N_days" moving avg
             # AND not to double up on stock inventory
-            elif price < last_5day_avg_from(prices, day)*0.98 and buy == 0:#buy conditions
+            elif price < last_N_day_avg_from(prices, N_days, day)*0.98 and buy == 0:#buy conditions
                 print('\nbuy at:\t\t$',price)
                 buy = price# updates stock inventory to current purchase
 
@@ -75,8 +78,10 @@ def meanReversionStrategey(ticker, prices):
     print('percent return:\t',final_profit_percentage,'\n')
     return prices, total_profit, final_profit_percentage
 
-# calculates & prints trading stratagy with any difference from 5 day moving average inversed from meanReversionStrategey
+# calculates & prints trading stratagy with any difference from "N_days" moving average inversed from meanReversionStrategey
 def simpleMovingAverageStrategy(ticker, prices):
+    N_days = 50# executes strategy over Nth number of days
+
     #initialization for transaction history analytics
     total_profit = 0
     buy = 0
@@ -85,11 +90,11 @@ def simpleMovingAverageStrategy(ticker, prices):
     print('\n'+ticker,'Simple Moving Average Strategy Output:',date_range)
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
-        if day > 5:# ensures at least 5 days have past till 5day average calculates
+        if day > N_days:# ensures at least "N_days" days have past till 5day average calculates
 
-            #ensures today's price is less than last 5 day moving avg
+            #ensures today's price is less than last "N_days" moving avg
             #AND not to double up on stock inventory
-            if price < last_5day_avg_from(prices, day) and buy != 0:#sell conditions
+            if price < last_N_day_avg_from(prices, N_days, day) and buy != 0:#sell conditions
                 trade_profits = round(price - buy,2)#initiates purchase of stock
                 total_profit += trade_profits#adds to total profits
                 print('sell at:\t$',price)
@@ -98,9 +103,9 @@ def simpleMovingAverageStrategy(ticker, prices):
                     first_buy = buy# keeps track of price of first purchase for return on investment
                 buy = 0# resets stock inventory to zero
 
-            #ensures today's price is greater than last 5 day moving avg
+            #ensures today's price is greater than last "N_days" moving avg
             # AND not to double up on stock inventory
-            elif price > last_5day_avg_from(prices, day) and buy == 0:#buy conditions
+            elif price > last_N_day_avg_from(prices, N_days, day) and buy == 0:#buy conditions
                 print('\nbuy at:\t\t$',price)
                 buy = price# updates stock inventory to current purchase
 
