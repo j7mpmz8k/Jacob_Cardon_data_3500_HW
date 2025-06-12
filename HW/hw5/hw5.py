@@ -35,7 +35,7 @@ def last_5day_avg_from(prices, day=0):
         return print('\nERROR! Day must be no less than 5, and no more than', len(prices), '\n')
     return sum(prices[day1:day5])/5
 
-# calculates trading stratagy with at 2% difference from 5 day moving average
+# calculates & prints trading stratagy with at 2% difference from 5 day moving average
 def meanReversionStrategey(ticker, prices):
     #initialization for transaction history analytics
     total_profit = 0
@@ -75,7 +75,7 @@ def meanReversionStrategey(ticker, prices):
     print('percent return:\t',final_profit_percentage,'\n')
     return prices, total_profit, final_profit_percentage
 
-# calculates trading stratagy with any difference from 5 day moving average
+# calculates & prints trading stratagy with any difference from 5 day moving average
 def simpleMovingAverageStrategy(ticker, prices):
     #initialization for transaction history analytics
     total_profit = 0
