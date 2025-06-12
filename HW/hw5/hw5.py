@@ -1,13 +1,23 @@
 import json
 directory_path = '/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw5/'
+date_range = "12Jun24-11Jun25"
+
+
+def find_ticker(file_name):
+    ticker = ''
+    for char in file_name:
+        if char == '.':
+            break
+        ticker += char
+    return ticker
 
 
 def import_stock(file_name):
     with open(directory_path+file_name) as stock_file: #mar18,2024 - mar17,2025....matching example given in HW4
         lines = stock_file.read().split()# converts to a list
-        lines = [round(float(line),2) for line in lines]# sets each price value to a float rounded to two decimal places
+        prices = [round(float(line),2) for line in lines]# sets each price value to a float rounded to two decimal places
     ticker = find_ticker(file_name)
-    return lines
+    return ticker, prices
 
 
 #calculates previous 5 day moving average along with error preventions ensuring 5 days are available to calculate
@@ -25,7 +35,7 @@ def meanReversionStrategey(ticker, prices):
     buy = 0
     first_buy = 0
 
-    print('\n'+ticker,'Mean Reversion Strategy Output: Mar18,2024 - Mar17,2025')
+    print('\n'+ticker,'Mean Reversion Strategy Output:', date_range)
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
         if day > 5:# ensures at least 5 days have past till 5day average calculates
@@ -65,7 +75,7 @@ def simpleMovingAverageStrategy(ticker, prices):
     buy = 0
     first_buy = 0
 
-    print('\n'+ticker,'Simple Moving Average Strategy Output: Mar18,2024 - Mar17,2025')
+    print('\n'+ticker,'Simple Moving Average Strategy Output:',date_range)
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
         if day > 5:# ensures at least 5 days have past till 5day average calculates
@@ -99,15 +109,6 @@ def simpleMovingAverageStrategy(ticker, prices):
     return prices, total_profit, final_profit_percentage
 
 
-def find_ticker(file):
-    ticker = ''
-    for char in file:
-        if char == '.':
-            break
-        ticker += char
-    return ticker
-
-
 returns = {}
 def send_to_dictonary(ticker, prices):
     prices, mr_profit, mr_returns = meanReversionStrategey(ticker, prices)
@@ -128,8 +129,7 @@ def saveResults(dictionary):
 stock_files = ['AAPL.txt', 'ADBE.txt', 'META.txt', 'AMZN.txt', 'COIN.txt', 'GOOG.txt', 'HOOD.txt', 'NVDA.txt', 'TSLA.txt', 'VOO.txt']
 
 for file_name in stock_files:
-    ticker = find_ticker(file_name)
-    prices = import_stock(file_name)
+    ticker, prices = import_stock(file_name)
     send_to_dictonary(ticker, prices)
 
 saveResults(returns)

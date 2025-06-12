@@ -1,12 +1,23 @@
 import json
-directory_path = "/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw5/"
+directory_path = '/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw5/'
+date_range = "12Jun24-11Jun25"
+
+
+def find_ticker(file_name):
+    ticker = ''
+    for char in file_name:
+        if char == '.':
+            break
+        ticker += char
+    return ticker
+
 
 def import_stock(file_name):
     with open(directory_path+file_name) as stock_file: #mar18,2024 - mar17,2025....matching example given in HW4
         lines = stock_file.read().split()# converts to a list
-        lines = [round(float(line),2) for line in lines]# sets each price value to a float rounded to two decimal places
+        prices = [round(float(line),2) for line in lines]# sets each price value to a float rounded to two decimal places
     ticker = find_ticker(file_name)
-    return lines
+    return ticker, prices
 
 
 #calculates previous 5 day moving average along with error preventions ensuring 5 days are available to calculate
@@ -14,7 +25,7 @@ def last_5day_avg_from(prices, day=0):
     day5 = day
     day1 = day-5
     if day1 < 0:
-        return print("\nERROR! Day must be no less than 5, and no more than", len(prices), "\n")
+        return print('\nERROR! Day must be no less than 5, and no more than', len(prices), '\n')
     return sum(prices[day1:day5])/5
 
 
@@ -24,7 +35,7 @@ def meanReversionStrategey(ticker, prices):
     buy = 0
     first_buy = 0
 
-    print("\n"+ticker,"Mean Reversion Strategy Output: Mar18,2024 - Mar17,2025")
+    print('\n'+ticker,'Mean Reversion Strategy Output:', date_range)
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
         if day > 5:# ensures at least 5 days have past till 5day average calculates
@@ -34,8 +45,8 @@ def meanReversionStrategey(ticker, prices):
             if price > last_5day_avg_from(prices, day)*1.02 and buy != 0:#sell conditions
                 trade_profits = round(price - buy,2)#initiates purchase of stock
                 total_profit += trade_profits#adds to total profits
-                print("sell at:\t$",price)
-                print("trade profits:\t$",trade_profits)
+                print('sell at:\t$',price)
+                print('trade profits:\t$',trade_profits)
                 if first_buy == 0:
                     first_buy = buy# keeps track of price of first purchase for return on investment
                 buy = 0# resets stock inventory to zero
@@ -43,18 +54,18 @@ def meanReversionStrategey(ticker, prices):
             #ensures today's price is at least 2% greater than last 5 day moving avg
             # AND not to double up on stock inventory
             elif price < last_5day_avg_from(prices, day)*0.98 and buy == 0:#buy conditions
-                print("\nbuy at:\t\t$",price)
+                print('\nbuy at:\t\t$',price)
                 buy = price# updates stock inventory to current purchase
 
     #calculates ROI % 
-    final_profit_percentage = str(round((total_profit/first_buy)*100,2))+"%"
+    final_profit_percentage = str(round((total_profit/first_buy)*100,2))+'%'
     total_profit = round(total_profit,2)
 
     #prints final totals of profits and returns of a year of trade history         
-    print("-"*24)#creates a line for formatting
-    print("total profits:\t"+"$",total_profit)
-    print("first buy:\t"+"$",first_buy)
-    print("percent return:\t",final_profit_percentage,"\n")
+    print('-'*24)#creates a line for formatting
+    print('total profits:\t'+'$',total_profit)
+    print('first buy:\t'+'$',first_buy)
+    print('percent return:\t',final_profit_percentage,'\n')
     return prices, total_profit, final_profit_percentage
 
 
@@ -64,67 +75,61 @@ def simpleMovingAverageStrategy(ticker, prices):
     buy = 0
     first_buy = 0
 
-    print("\n"+ticker,"Simple Moving Average Strategy Output: Mar18,2024 - Mar17,2025")
+    print('\n'+ticker,'Simple Moving Average Strategy Output:',date_range)
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
         if day > 5:# ensures at least 5 days have past till 5day average calculates
 
-            #ensures today's price is at least 2% less than last 5 day moving avg
+            #ensures today's price is less than last 5 day moving avg
             #AND not to double up on stock inventory
             if price > last_5day_avg_from(prices, day) and buy != 0:#sell conditions
                 trade_profits = round(price - buy,2)#initiates purchase of stock
                 total_profit += trade_profits#adds to total profits
-                print("sell at:\t$",price)
-                print("trade profits:\t$",trade_profits)
+                print('sell at:\t$',price)
+                print('trade profits:\t$',trade_profits)
                 if first_buy == 0:
                     first_buy = buy# keeps track of price of first purchase for return on investment
                 buy = 0# resets stock inventory to zero
 
-            #ensures today's price is at least 2% greater than last 5 day moving avg
+            #ensures today's price is greater than last 5 day moving avg
             # AND not to double up on stock inventory
             elif price < last_5day_avg_from(prices, day) and buy == 0:#buy conditions
-                print("\nbuy at:\t\t$",price)
+                print('\nbuy at:\t\t$',price)
                 buy = price# updates stock inventory to current purchase
 
     #calculates ROI % 
-    final_profit_percentage = str(round((total_profit/first_buy)*100,2))+"%"
+    final_profit_percentage = str(round((total_profit/first_buy)*100,2))+'%'
     total_profit = round(total_profit,2)
 
     #prints final totals of profits and returns of a year of trade history         
-    print("-"*24)#creates a line for formatting
-    print("total profits:\t"+"$",total_profit)
-    print("first buy:\t"+"$",first_buy)
-    print("percent return:\t",final_profit_percentage,"\n")
+    print('-'*24)#creates a line for formatting
+    print('total profits:\t'+'$',total_profit)
+    print('first buy:\t'+'$',first_buy)
+    print('percent return:\t',final_profit_percentage,'\n')
     return prices, total_profit, final_profit_percentage
 
-def find_ticker(file):
-    ticker = ""
-    for char in file:
-        if char == ".":
-            break
-        ticker += char
-    return ticker
 
 returns = {}
-def send_to_json(ticker, prices):
+def send_to_dictonary(ticker, prices):
     prices, mr_profit, mr_returns = meanReversionStrategey(ticker, prices)
     prices, sma_profit, sma_returns = simpleMovingAverageStrategy(ticker, prices)
-    returns[ticker+"_prices"] = prices
-    returns[ticker+"_mr_profit"] = mr_profit
-    returns[ticker+"_mr_returns"] = mr_returns
-    returns[ticker+"_sma_profit"] = sma_profit
-    returns[ticker+"_sma_returns"] = sma_returns
+    returns[ticker+'_prices'] = prices
+    returns[ticker+'_mr_profit'] = mr_profit
+    returns[ticker+'_mr_returns'] = mr_returns
+    returns[ticker+'_sma_profit'] = sma_profit
+    returns[ticker+'_sma_returns'] = sma_returns
 
+
+def saveResults(dictionary):
+    with open(directory_path+'results.json', 'w') as file:
+        json.dump(dictionary, file, indent=4)
+    print('\n"results.json" saved to:', directory_path, '\n')
 #----------------------------------------------------------------------------------------------------
 
-stock_files = ["AAPL.txt", "META.txt", "AMZN.txt", "COIN.txt", "GOOG.txt", "HOOD.txt", "NVDA.txt", "TSLA.txt", "VOO.txt"]
+stock_files = ['AAPL.txt', 'ADBE.txt', 'META.txt', 'AMZN.txt', 'COIN.txt', 'GOOG.txt', 'HOOD.txt', 'NVDA.txt', 'TSLA.txt', 'VOO.txt']
 
 for file_name in stock_files:
-    ticker = find_ticker(file_name)
-    prices = import_stock(file_name)
-    send_to_json(ticker, prices)
+    ticker, prices = import_stock(file_name)
+    send_to_dictonary(ticker, prices)
 
-with open(directory_path+"stock_analysis.json", "w") as f:
-    json.dump(returns, f, indent=1)
-
-print("\n.json saved successfully to", directory_path, "\n")
+saveResults(returns)
