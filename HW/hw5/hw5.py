@@ -75,7 +75,7 @@ def meanReversionStrategey(ticker, prices):
     print('percent return:\t',final_profit_percentage,'\n')
     return prices, total_profit, final_profit_percentage
 
-# calculates & prints trading stratagy with any difference from 5 day moving average
+# calculates & prints trading stratagy with any difference from 5 day moving average inversed from meanReversionStrategey
 def simpleMovingAverageStrategy(ticker, prices):
     #initialization for transaction history analytics
     total_profit = 0
