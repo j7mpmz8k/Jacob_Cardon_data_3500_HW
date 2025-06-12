@@ -69,7 +69,7 @@ def simpleMovingAverageStrategy(ticker, prices):
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
         if day > 5:# ensures at least 5 days have past till 5day average calculates
 
-            #ensures today's price is at least 2% less than last 5 day moving avg
+            #ensures today's price is less than last 5 day moving avg
             #AND not to double up on stock inventory
             if price > last_5day_avg_from(prices, day) and buy != 0:#sell conditions
                 trade_profits = round(price - buy,2)#initiates purchase of stock
@@ -80,7 +80,7 @@ def simpleMovingAverageStrategy(ticker, prices):
                     first_buy = buy# keeps track of price of first purchase for return on investment
                 buy = 0# resets stock inventory to zero
 
-            #ensures today's price is at least 2% greater than last 5 day moving avg
+            #ensures today's price is greater than last 5 day moving avg
             # AND not to double up on stock inventory
             elif price < last_5day_avg_from(prices, day) and buy == 0:#buy conditions
                 print('\nbuy at:\t\t$',price)
@@ -105,6 +105,7 @@ def find_ticker(file):
         ticker += char
     return ticker
 
+
 returns = {}
 def send_to_json(ticker, prices):
     prices, mr_profit, mr_returns = meanReversionStrategey(ticker, prices)
@@ -115,16 +116,18 @@ def send_to_json(ticker, prices):
     returns[ticker+'_sma_profit'] = sma_profit
     returns[ticker+'_sma_returns'] = sma_returns
 
+
+def saveResults(dictionary):
+    with open(directory_path+'results.json', 'w') as file:
+        json.dump(dictionary, file, indent=4)
+    print('\n"results.json" saved to:', directory_path, '\n')
 #----------------------------------------------------------------------------------------------------
 
-stock_files = ['AAPL.txt', 'META.txt', 'AMZN.txt', 'COIN.txt', 'GOOG.txt', 'HOOD.txt', 'NVDA.txt', 'TSLA.txt', 'VOO.txt']
+stock_files = ['AAPL.txt', 'ADBE.txt', 'META.txt', 'AMZN.txt', 'COIN.txt', 'GOOG.txt', 'HOOD.txt', 'NVDA.txt', 'TSLA.txt', 'VOO.txt']
 
 for file_name in stock_files:
     ticker = find_ticker(file_name)
     prices = import_stock(file_name)
     send_to_json(ticker, prices)
 
-with open(directory_path+'results.json', 'w') as f:
-    json.dump(returns, f, indent=4)
-
-print('\n"results.json" saved to:', directory_path, '\n')
+saveResults(returns)
