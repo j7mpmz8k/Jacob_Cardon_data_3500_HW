@@ -13,7 +13,7 @@ def find_ticker(file_name):
     return ticker
 
 #reads all files from "stock_files" variable. 
-#Returns ticker and prices to be passed into trading stratagy calculation functions along with functions to save to dictionary and .json file
+#Returns ticker and prices to be passed into trading strategy calculation functions along with functions to save to dictionary and .json file
 def import_stock(file_name):
     with open(directory_path+file_name) as stock_file:
         lines = stock_file.read().split()# converts to a list
@@ -26,7 +26,7 @@ def import_stock(file_name):
 "ticker" -->(import_stock-->find_ticker)-->send_to_dictionary-->meanReversionStrategey or simpleMovingAverageStrategy-->send_to_dictionary
 '''
 
-#calculates previous 5 day moving average along with error preventions ensuring 5 days are available to calculate
+#calculates previous "N_days" moving average along with error preventions ensuring "N_days" are available to calculate
 #pulls price data passed down from functions
 def last_N_day_avg_from(prices, N_days, day=0):
     dayN = day
@@ -36,10 +36,10 @@ def last_N_day_avg_from(prices, N_days, day=0):
     return sum(prices[day1:dayN])/N_days
 
 
-# calculates & prints trading stratagy with at 2% difference from "N_days" moving average
+# calculates & prints trading strategy with at 2% difference from "N_days" moving average
 def meanReversionStrategey(ticker, prices):
-    N_days = 50# executes strategy over Nth number of days
-
+    N_days = 5# executes strategy over Nth number of days
+    
     #initialization for transaction history analytics
     total_profit = 0
     buy = 0
@@ -48,7 +48,7 @@ def meanReversionStrategey(ticker, prices):
     print('\n'+ticker,'Mean Reversion Strategy Output:', date_range)
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
-        if day > N_days:# ensures at least "N_days" have past till 5day average calculates
+        if day > N_days:# ensures at least "N_days" have past till "N_days" average calculates
 
             #ensures today's price is at least 2% less than last "N_days" moving avg
             #AND not to double up on stock inventory
@@ -71,7 +71,7 @@ def meanReversionStrategey(ticker, prices):
     try:
         final_profit_percentage = str(round((total_profit/first_buy)*100,2))+'%'
     except:
-        final_profit_percentage = "0%"
+        final_profit_percentage = "0.00%"
     total_profit = round(total_profit,2)
 
     #prints final totals of profits and returns of a year of trade history         
@@ -81,7 +81,7 @@ def meanReversionStrategey(ticker, prices):
     print('percent return:\t',final_profit_percentage,'\n')
     return prices, total_profit, final_profit_percentage
 
-# calculates & prints trading stratagy with any difference from "N_days" moving average inversed from meanReversionStrategey
+# calculates & prints trading strategy with any difference from "N_days" moving average inversed from meanReversionStrategey
 def simpleMovingAverageStrategy(ticker, prices):
     N_days = 50# executes strategy over Nth number of days
 
@@ -93,7 +93,7 @@ def simpleMovingAverageStrategy(ticker, prices):
     print('\n'+ticker,'Simple Moving Average Strategy Output:',date_range)
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
-        if day > N_days:# ensures at least "N_days" days have past till 5day average calculates
+        if day > N_days:# ensures at least "N_days" days have past till "N_days" average calculates
 
             #ensures today's price is less than last "N_days" moving avg
             #AND not to double up on stock inventory
@@ -116,7 +116,7 @@ def simpleMovingAverageStrategy(ticker, prices):
     try:
         final_profit_percentage = str(round((total_profit/first_buy)*100,2))+'%'
     except:
-        final_profit_percentage = "0%"
+        final_profit_percentage = "0.00%"
     total_profit = round(total_profit,2)
 
     #prints final totals of profits and returns of a year of trade history         
@@ -126,8 +126,8 @@ def simpleMovingAverageStrategy(ticker, prices):
     print('percent return:\t',final_profit_percentage,'\n')
     return prices, total_profit, final_profit_percentage
 
-#sets up dictionary of trading analysis preperatory to exporting to .json
-#also exucutes calculations of trading stratagies
+#sets up dictionary of trading analysis preparatory to exporting to .json
+#also executes calculations of trading strategies
 returns = {}
 def send_to_dictonary(ticker, prices):
     prices, mr_profit, mr_returns = meanReversionStrategey(ticker, prices)
@@ -140,16 +140,16 @@ def send_to_dictonary(ticker, prices):
 
 #exports dictionary to .json file
 def saveResults(dictionary):
-    with open('results.json', 'w') as file:
+    with open(directory_path+'results.json', 'w') as file:
         json.dump(dictionary, file, indent=4)
     print('\n"results.json" saved to:', directory_path, '\n')
 
 #----------------------------------------------------------------------------------------------------
 
-# execution script to open, read, perform anaylis, and save to dictionary
+# execution script to open, read, perform analysis, and save to dictionary
 for file_name in stock_files:
     ticker, prices = import_stock(file_name)# finds files from directory variable, reads data and extracts ticker from file name and price data within file
-    send_to_dictonary(ticker, prices)# caluclates trading strading stratagies and saves analysis to dictionary
+    send_to_dictonary(ticker, prices)# calculates trading trading strategies and saves analysis to dictionary
 
 #writes saved dictionary to results.json file to directory path variable
 saveResults(returns)
