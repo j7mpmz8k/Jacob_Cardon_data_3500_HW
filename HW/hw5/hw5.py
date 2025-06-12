@@ -1,8 +1,9 @@
 import json
-directory_path = '/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw5/'
-date_range = "12Jun24-11Jun25"
+directory_path = '/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw5/'#used for both read and write directory
+stock_files = ['AAPL.txt', 'ADBE.txt', 'META.txt', 'AMZN.txt', 'COIN.txt', 'GOOG.txt', 'HOOD.txt', 'NVDA.txt', 'TSLA.txt', 'VOO.txt']
+date_range = "12Jun24-11Jun25"# one year of data for files pre-sorted with oldest at the top, newest at the bottom
 
-
+# used inside "import_stock" function to extract ticker from file name
 def find_ticker(file_name):
     ticker = ''
     for char in file_name:
@@ -11,16 +12,22 @@ def find_ticker(file_name):
         ticker += char
     return ticker
 
-
+#reads all files from "stock_files" variable. 
+#Returns ticker and prices to be passed into trading stratagy calculation functions along with functions to save to dictionary and .json file
 def import_stock(file_name):
-    with open(directory_path+file_name) as stock_file: #mar18,2024 - mar17,2025....matching example given in HW4
+    with open(directory_path+file_name) as stock_file:
         lines = stock_file.read().split()# converts to a list
         prices = [round(float(line),2) for line in lines]# sets each price value to a float rounded to two decimal places
     ticker = find_ticker(file_name)
     return ticker, prices
 
+''' Abstraction layers of "ticker" and "prices" returned
+"prices" -->import_stock-->send_to_dictionary-->(meanReversionStrategey or simpleMovingAverageStrategy-->last_5day_avg_from)-->send_to_dictionary
+"ticker" -->(import_stock-->find_ticker)-->send_to_dictionary-->meanReversionStrategey or simpleMovingAverageStrategy-->send_to_dictionary
+'''
 
 #calculates previous 5 day moving average along with error preventions ensuring 5 days are available to calculate
+#pulls price data passed down from functions
 def last_5day_avg_from(prices, day=0):
     day5 = day
     day1 = day-5
@@ -28,7 +35,7 @@ def last_5day_avg_from(prices, day=0):
         return print('\nERROR! Day must be no less than 5, and no more than', len(prices), '\n')
     return sum(prices[day1:day5])/5
 
-
+# calculates trading stratagy with at 2% difference from 5 day moving average
 def meanReversionStrategey(ticker, prices):
     #initialization for transaction history analytics
     total_profit = 0
@@ -68,7 +75,7 @@ def meanReversionStrategey(ticker, prices):
     print('percent return:\t',final_profit_percentage,'\n')
     return prices, total_profit, final_profit_percentage
 
-
+# calculates trading stratagy with any difference from 5 day moving average
 def simpleMovingAverageStrategy(ticker, prices):
     #initialization for transaction history analytics
     total_profit = 0
@@ -108,7 +115,7 @@ def simpleMovingAverageStrategy(ticker, prices):
     print('percent return:\t',final_profit_percentage,'\n')
     return prices, total_profit, final_profit_percentage
 
-
+#sets up dictionary of trading analysis preperatory to exporting to .json
 returns = {}
 def send_to_dictonary(ticker, prices):
     prices, mr_profit, mr_returns = meanReversionStrategey(ticker, prices)
@@ -119,17 +126,18 @@ def send_to_dictonary(ticker, prices):
     returns[ticker+'_sma_profit'] = sma_profit
     returns[ticker+'_sma_returns'] = sma_returns
 
-
+#exports dictionary to .json file
 def saveResults(dictionary):
     with open(directory_path+'results.json', 'w') as file:
         json.dump(dictionary, file, indent=4)
     print('\n"results.json" saved to:', directory_path, '\n')
+
 #----------------------------------------------------------------------------------------------------
 
-stock_files = ['AAPL.txt', 'ADBE.txt', 'META.txt', 'AMZN.txt', 'COIN.txt', 'GOOG.txt', 'HOOD.txt', 'NVDA.txt', 'TSLA.txt', 'VOO.txt']
-
+# execution script to open, read, perform anaylis, and save to dictionary
 for file_name in stock_files:
-    ticker, prices = import_stock(file_name)
-    send_to_dictonary(ticker, prices)
+    ticker, prices = import_stock(file_name)# finds files from directory variable, reads data and extracts ticker from file name and price data within file
+    send_to_dictonary(ticker, prices)# caluclates trading strading stratagies and saves analysis to dictionary
 
+#writes saved dictionary to results.json file to directory path variable
 saveResults(returns)
