@@ -1,8 +1,7 @@
 import json
-
+directory_path = "/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw5/"
 
 def import_stock(file_name):
-    directory_path = "/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw5/"
     with open(directory_path+file_name) as stock_file: #mar18,2024 - mar17,2025....matching example given in HW4
         lines = stock_file.read().split()# converts to a list
         lines = [round(float(line),2) for line in lines]# sets each price value to a float rounded to two decimal places
@@ -126,5 +125,7 @@ for file_name in stock_files:
     prices = import_stock(file_name)
     send_to_json(ticker, prices)
 
-with open("stock_analysis_results.json", "w") as f:
+with open(directory_path+"stock_analysis.json", "w") as f:
     json.dump(returns, f, indent=1)
+
+print("\n.json saved successfully to", directory_path, "\n")
