@@ -26,7 +26,7 @@ def import_stock(file_name):
 "ticker" -->(import_stock-->find_ticker)-->send_to_dictionary-->meanReversionStrategey or simpleMovingAverageStrategy-->send_to_dictionary
 '''
 
-#calculates previous 5 day moving average along with error preventions ensuring 5 days are available to calculate
+#calculates previous "N_days" moving average along with error preventions ensuring "N_days are available to calculate
 #pulls price data passed down from functions
 def last_N_day_avg_from(prices, N_days, day=0):
     dayN = day
