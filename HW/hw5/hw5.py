@@ -116,6 +116,7 @@ def simpleMovingAverageStrategy(ticker, prices):
     return prices, total_profit, final_profit_percentage
 
 #sets up dictionary of trading analysis preperatory to exporting to .json
+#also exucutes calculations of trading stratagies
 returns = {}
 def send_to_dictonary(ticker, prices):
     prices, mr_profit, mr_returns = meanReversionStrategey(ticker, prices)
