@@ -1,5 +1,5 @@
 import json
-directory_path = '/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw5/'#used for both read and write directory
+directory_path = '/home/ubuntu/Jacob_Cardon_data_3500_HW/HW/hw5/'#used for both read and write directory
 stock_files = ['AAPL.txt', 'ADBE.txt', 'META.txt', 'AMZN.txt', 'COIN.txt', 'GOOG.txt', 'HOOD.txt', 'NVDA.txt', 'TSLA.txt', 'VOO.txt']
 date_range = "12Jun24-11Jun25"# one year of data for files pre-sorted with oldest at the top, newest at the bottom
 
@@ -130,9 +130,9 @@ def simpleMovingAverageStrategy(ticker, prices):
 returns = {}
 # executes calculations of trading strategies
 def send_to_dictonary(ticker, prices):
+    returns[ticker+'_prices'] = prices
     mr_profit, mr_returns = meanReversionStrategey(ticker, prices)
     sma_profit, sma_returns = simpleMovingAverageStrategy(ticker, prices)
-    returns[ticker+'_prices'] = prices
     returns[ticker+'_mr_profit'] = mr_profit
     returns[ticker+'_mr_returns'] = mr_returns
     returns[ticker+'_sma_profit'] = sma_profit
