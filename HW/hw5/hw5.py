@@ -1,5 +1,5 @@
 import json
-directory_path = '/home/Ubuntu/Jacob_Cardon_data_3500_HW/HW/hw5/'#used for both read and write directory
+directory_path = '/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/hw5/'#used for both read and write directory
 stock_files = ['AAPL.txt', 'ADBE.txt', 'META.txt', 'AMZN.txt', 'COIN.txt', 'GOOG.txt', 'HOOD.txt', 'NVDA.txt', 'TSLA.txt', 'VOO.txt']
 date_range = "12Jun24-11Jun25"# one year of data for files pre-sorted with oldest at the top, newest at the bottom
 
@@ -79,11 +79,11 @@ def meanReversionStrategey(ticker, prices):
     print('total profits:\t'+'$',total_profit)
     print('first buy:\t'+'$',first_buy)
     print('percent return:\t',final_profit_percentage,'\n')
-    return prices, total_profit, final_profit_percentage
+    return total_profit, final_profit_percentage
 
 # calculates & prints trading strategy with any difference from "N_days" moving average inversed from meanReversionStrategey
 def simpleMovingAverageStrategy(ticker, prices):
-    N_days = 50# executes strategy over Nth number of days
+    N_days = 5# executes strategy over Nth number of days
 
     #initialization for transaction history analytics
     total_profit = 0
@@ -124,14 +124,14 @@ def simpleMovingAverageStrategy(ticker, prices):
     print('total profits:\t'+'$',total_profit)
     print('first buy:\t'+'$',first_buy)
     print('percent return:\t',final_profit_percentage,'\n')
-    return prices, total_profit, final_profit_percentage
+    return total_profit, final_profit_percentage
 
 #sets up dictionary of trading analysis preparatory to exporting to .json
 #also executes calculations of trading strategies
 returns = {}
 def send_to_dictonary(ticker, prices):
-    prices, mr_profit, mr_returns = meanReversionStrategey(ticker, prices)
-    prices, sma_profit, sma_returns = simpleMovingAverageStrategy(ticker, prices)
+    mr_profit, mr_returns = meanReversionStrategey(ticker, prices)
+    sma_profit, sma_returns = simpleMovingAverageStrategy(ticker, prices)
     returns[ticker+'_prices'] = prices
     returns[ticker+'_mr_profit'] = mr_profit
     returns[ticker+'_mr_returns'] = mr_returns
