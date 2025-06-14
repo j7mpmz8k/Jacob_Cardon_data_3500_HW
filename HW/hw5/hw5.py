@@ -81,7 +81,7 @@ def meanReversionStrategey(ticker, prices):
     print('percent return:\t',final_profit_percentage,'\n')
     return total_profit, final_profit_percentage
 
-# calculates & prints trading strategy with any difference from "N_days" moving average inversed from meanReversionStrategey
+# calculates & prints trading strategy with any difference from "N_days" moving average inverted from meanReversionStrategey
 def simpleMovingAverageStrategy(ticker, prices):
     N_days = 5# executes strategy over Nth number of days
 
