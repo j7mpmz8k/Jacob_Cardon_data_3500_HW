@@ -22,8 +22,8 @@ def import_stock(file_name):
     return ticker, prices
 
 ''' Abstraction layers of "ticker" and "prices" returned
-"prices" -->import_stock-->send_to_dictionary-->(meanReversionStrategey or simpleMovingAverageStrategy-->last_N_day_avg_from)-->send_to_dictionary
-"ticker" -->(import_stock-->find_ticker)-->send_to_dictionary-->meanReversionStrategey or simpleMovingAverageStrategy-->send_to_dictionary
+"prices" -->import_stock-->send_to_dictionary-->(meanReversionStrategey or simpleMovingAverageStrategy-->last_N_day_avg_from)
+"ticker" -->(import_stock-->find_ticker)-->send_to_dictionary-->meanReversionStrategey or simpleMovingAverageStrategy
 '''
 
 #calculates previous "N_days" moving average along with error preventions ensuring "N_days" are available to calculate
