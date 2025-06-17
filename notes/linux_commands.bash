@@ -6,3 +6,5 @@ pwd #returns active working directory
 
 source .venv/bin/activate
 deactivate
+
+pip instal requests numpy
