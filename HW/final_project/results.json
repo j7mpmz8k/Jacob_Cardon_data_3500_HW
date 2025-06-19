@@ -6448,10 +6448,10 @@
         195.64,
         196.58
     ],
-    "AAPL_mr_profit": 214.68,
-    "AAPL_mr_returns": "240.03%",
-    "AAPL_sma_profit": 253.53,
-    "AAPL_sma_returns": "282.89%",
+    "AAPL_mr_profit": 78.6,
+    "AAPL_mr_returns": "162.06%",
+    "AAPL_sma_profit": 101.71,
+    "AAPL_sma_returns": "423.97%",
     "ADBE_prices": [
         68.56,
         68.06,
@@ -12901,8 +12901,8 @@
         382.68,
         378.04
     ],
-    "ADBE_mr_profit": 440.32,
-    "ADBE_mr_returns": "596.56%",
-    "ADBE_sma_profit": -52.39,
-    "ADBE_sma_returns": "-72.76%"
+    "ADBE_mr_profit": 193.57,
+    "ADBE_mr_returns": "286.77%",
+    "ADBE_sma_profit": 108.06,
+    "ADBE_sma_returns": "88.57%"
 }
