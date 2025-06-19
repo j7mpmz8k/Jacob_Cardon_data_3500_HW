@@ -30,7 +30,7 @@ def import_stock(ticker):
         #pulls all close prices in all dates
         for date_key in raw_data[key1]:
             if date_key > last_date:
-                new_lines.append(f'{date_key},{float(raw_data[key1][date_key][key3_volume])},{float(raw_data[key1][date_key][key3_close])}\n')
+                new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_volume]),2)},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
         new_lines.reverse()
 
         with open(f'{directory_path}{ticker}.csv', 'a') as csv_file:
@@ -40,7 +40,7 @@ def import_stock(ticker):
         new_lines = []
         #pulls all close prices in all dates
         for date_key in raw_data[key1]:
-            new_lines.append(f'{date_key},{float(raw_data[key1][date_key][key3_volume])},{float(raw_data[key1][date_key][key3_close])}\n')
+            new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_volume]),2)},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
         new_lines.reverse()
 
         with open(f'{directory_path}{ticker}.csv', 'w') as csv_file:
@@ -52,7 +52,7 @@ def import_stock(ticker):
         prices = []
         for line in lines:
             prices.append(float(line.split(',')[-1].strip()))
-    return ticker, prices
+    return prices
 
 #calculates previous "N_days" moving average along with error preventions ensuring "N_days" are available to calculate
 #pulls price data passed down from functions
@@ -157,7 +157,7 @@ def simpleMovingAverageStrategy(ticker, prices):
 #sets up dictionary of trading analysis preparatory to exporting to .json
 returns = {}
 # executes calculations of trading strategies
-def send_to_dictonary(ticker, prices):
+def analyze_stocks(ticker, prices):
     returns[f'{ticker}_prices'] = prices
     mr_profit, mr_returns = meanReversionStrategey(ticker, prices)
     sma_profit, sma_returns = simpleMovingAverageStrategy(ticker, prices)
@@ -175,9 +175,9 @@ def saveResults(dictionary):
 #----------------------------------------------------------------------------------------------------
 
 # execution script to open, read, perform analysis, and save to dictionary
-for file_name in tickers:
-    ticker, prices = import_stock(file_name)# finds files from directory variable, reads data and extracts ticker from file name and price data within file
-    send_to_dictonary(ticker, prices)# calculates trading trading strategies and saves analysis to dictionary
+for ticker in tickers:
+    prices = import_stock(ticker)# finds files from directory variable, reads data and extracts ticker from file name and price data within file
+    analyze_stocks(ticker, prices)# calculates trading trading strategies and saves analysis to dictionary
 
 #writes saved dictionary to results.json file to directory path variable
 saveResults(returns)
