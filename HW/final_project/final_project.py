@@ -4,48 +4,47 @@ import time
 directory_path = '/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/final_project/'
 #tickers = ['AAPL', 'ADBE', 'META', 'AMZN', 'COIN', 'GOOG', 'HOOD', 'NVDA', 'TSLA', 'VOO']
 tickers = ['AAPL', 'ADBE']
-date_range = "12Jun24-11Jun25"# one year of data for files pre-sorted with oldest at the top, newest at the bottom
 
 #reads all files from "stock_files" variable. 
 #Returns ticker and prices to be passed into trading strategy calculation functions along with functions to save to dictionary and .json file
 def import_stock(ticker):
-    req = requests.get(f'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=NG9C9EPVYBMQT0C8')
-    time.sleep(12)
-    raw_data = json.loads(req.text)#.loads() used instead of .load() since json dictionary is contained within a string
-    #listing out available keys
-    key1 = 'Time Series (Daily)'
-    key2_date = '2025-06-16'# Note! many more dates
-    key3_open = '1. open'
-    key3_high = '2. high'
-    key3_low = '3. low'
-    key3_close = '4. close'
-    key3_volume = '5. volume'
+    # req = requests.get(f'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=NG9C9EPVYBMQT0C8')
+    # time.sleep(12)
+    # raw_data = json.loads(req.text)#.loads() used instead of .load() since json dictionary is contained within a string
+    # #listing out available keys
+    # key1 = 'Time Series (Daily)'
+    # key2_date = '2025-06-16'# Note! many more dates
+    # key3_open = '1. open'
+    # key3_high = '2. high'
+    # key3_low = '3. low'
+    # key3_close = '4. close'
+    # key3_volume = '5. volume'
 
-    try:
-        with open(f'{directory_path}{ticker}.csv', 'r') as csv_file:
-            lines = csv_file.readlines()
-            last_date = lines[-1].split(',')[0]
-        new_lines = []
+    # try:
+    #     with open(f'{directory_path}{ticker}.csv', 'r') as csv_file:
+    #         lines = csv_file.readlines()
+    #         last_date = lines[-1].split(',')[0]
+    #     new_lines = []
 
-        #pulls all close prices in all dates
-        for date_key in raw_data[key1]:
-            if date_key > last_date:
-                new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_volume]),2)},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
-        new_lines.reverse()
+    #     #pulls all close prices in all dates
+    #     for date_key in raw_data[key1]:
+    #         if date_key > last_date:
+    #             new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_volume]),2)},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
+    #     new_lines.reverse()
 
-        with open(f'{directory_path}{ticker}.csv', 'a') as csv_file:
-            csv_file.writelines(new_lines)
-        print('found existing file, appending new data')
-    except (FileNotFoundError, IndexError):
-        new_lines = []
-        #pulls all close prices in all dates
-        for date_key in raw_data[key1]:
-            new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_volume]),2)},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
-        new_lines.reverse()
+    #     with open(f'{directory_path}{ticker}.csv', 'a') as csv_file:
+    #         csv_file.writelines(new_lines)
+    #     print('found existing file, appending new data')
+    # except (FileNotFoundError, IndexError):
+    #     print('\nERROR! file not found or file is empty. Recreating file.')
+    #     new_lines = []
+    #     #pulls all close prices in all dates
+    #     for date_key in raw_data[key1]:
+    #         new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_volume]),2)},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
+    #     new_lines.reverse()
 
-        with open(f'{directory_path}{ticker}.csv', 'w') as csv_file:
-            csv_file.writelines(new_lines)
-        print('ERROR! file not found or file is empty. Recreating file.')
+    #     with open(f'{directory_path}{ticker}.csv', 'w') as csv_file:
+    #         csv_file.writelines(new_lines)
 
     with open(f'{directory_path}{ticker}.csv', 'r') as csv_file:
         lines = csv_file.readlines()
@@ -73,7 +72,9 @@ def meanReversionStrategey(ticker, prices):
     buy = 0
     first_buy = 0
 
-    print('\n'+ticker,'Mean Reversion Strategy Output:', date_range)
+    print('-'*44)#creates a line for formatting
+    print(f'{ticker} Mean Reversion Strategy Output:')
+
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
         if day > N_days:# ensures at least "N_days" have past till "N_days" average calculates
@@ -83,8 +84,9 @@ def meanReversionStrategey(ticker, prices):
             if price > last_N_day_avg_from(prices, N_days, day)*1.02 and buy != 0:#sell conditions
                 trade_profits = round(price - buy,2)#initiates purchase of stock
                 total_profit += trade_profits#adds to total profits
-                print(f'sell at:\t$ {price}')
-                print(f'trade profits:\t$ {trade_profits}')
+                if day == len(prices)-1:# checks if day is most recent day
+                    print(f'Today you should sell at:\t$ {price}')
+                    print(f'trade profits:\t$ {trade_profits}')
                 if first_buy == 0:
                     first_buy = buy# keeps track of price of first purchase for return on investment
                 buy = 0# resets stock inventory to zero
@@ -92,7 +94,8 @@ def meanReversionStrategey(ticker, prices):
             #ensures today's price is at least 2% greater than last "N_days" moving avg
             # AND not to double up on stock inventory
             elif price < last_N_day_avg_from(prices, N_days, day)*0.98 and buy == 0:#buy conditions
-                print(f'\nbuy at:\t\t$ {price}')
+                if day == len(prices)-1:# checks if day is most recent day
+                    print(f'Today you should buy at:\t\t$ {price}')
                 buy = price# updates stock inventory to current purchase
 
     #calculates ROI % 
@@ -103,10 +106,9 @@ def meanReversionStrategey(ticker, prices):
     total_profit = round(total_profit,2)
 
     #prints final totals of profits and returns of a year of trade history         
-    print('-'*24)#creates a line for formatting
     print(f'total profits:\t$ {total_profit}')
     print(f'first buy:\t$ {first_buy}')
-    print(f'percent return:\t  {final_profit_percentage}\n')
+    print(f'percent return:\t  {final_profit_percentage}')
     return total_profit, final_profit_percentage
 
 # calculates & prints trading strategy with any difference from "N_days" moving average inverted from meanReversionStrategey
@@ -118,7 +120,9 @@ def simpleMovingAverageStrategy(ticker, prices):
     buy = 0
     first_buy = 0
 
-    print('\n'+ticker,'Simple Moving Average Strategy Output:',date_range)
+    print('-'*44)#creates a line for formatting
+    print(f'{ticker} Simple Moving Average Strategy Output:')
+
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
         if day > N_days:# ensures at least "N_days" days have past till "N_days" average calculates
@@ -128,8 +132,9 @@ def simpleMovingAverageStrategy(ticker, prices):
             if price < last_N_day_avg_from(prices, N_days, day) and buy != 0:#sell conditions
                 trade_profits = round(price - buy,2)#initiates purchase of stock
                 total_profit += trade_profits#adds to total profits
-                print(f'sell at:\t$ {price}')
-                print(f'trade profits:\t$ {trade_profits}')
+                if day == len(prices)-1:# checks if day is most recent day
+                    print(f'Today you should sell at:\t$ {price}')
+                    print(f'trade profits:\t$ {trade_profits}')
                 if first_buy == 0:
                     first_buy = buy# keeps track of price of first purchase for return on investment
                 buy = 0# resets stock inventory to zero
@@ -137,7 +142,8 @@ def simpleMovingAverageStrategy(ticker, prices):
             #ensures today's price is greater than last "N_days" moving avg
             # AND not to double up on stock inventory
             elif price > last_N_day_avg_from(prices, N_days, day) and buy == 0:#buy conditions
-                print(f'\nbuy at:\t\t$ {price}')
+                if day == len(prices)-1:# checks if day is most recent day
+                    print(f'Today you should buy at:\t\t$ {price}')
                 buy = price# updates stock inventory to current purchase
 
     #calculates ROI % 
@@ -148,10 +154,10 @@ def simpleMovingAverageStrategy(ticker, prices):
     total_profit = round(total_profit,2)
 
     #prints final totals of profits and returns of a year of trade history         
-    print('-'*24)#creates a line for formatting
     print(f'total profits:\t$ {total_profit}')
     print(f'first buy:\t$ {first_buy}')
-    print(f'percent return:\t  {final_profit_percentage}\n')
+    print(f'percent return:\t  {final_profit_percentage}')
+    print('-'*44)#creates a line for formatting
     return total_profit, final_profit_percentage
 
 #sets up dictionary of trading analysis preparatory to exporting to .json
