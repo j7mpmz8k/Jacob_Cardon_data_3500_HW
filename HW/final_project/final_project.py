@@ -65,7 +65,7 @@ def last_N_day_avg_from(prices, N_days, day=0):
 
 # calculates & prints trading strategy with at 2% difference from "N_days" moving average
 def meanReversionStrategey(ticker, prices):
-    N_days = 5# executes strategy over Nth number of days
+    N_days = 200# executes strategy over Nth number of days
     
     #initialization for transaction history analytics
     total_profit = 0
@@ -73,7 +73,7 @@ def meanReversionStrategey(ticker, prices):
     first_buy = 0
 
     print('-'*44)#creates a line for formatting
-    print(f'{ticker} Mean Reversion Strategy Output:')
+    print(f'{ticker} Mean Reversion Strategy Over Period of: {N_days}')
 
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
@@ -121,7 +121,7 @@ def simpleMovingAverageStrategy(ticker, prices):
     first_buy = 0
 
     print('-'*44)#creates a line for formatting
-    print(f'{ticker} Simple Moving Average Strategy Output:')
+    print(f'{ticker} Simple Moving Average Strategy Output Over Period of: {N_days}')
 
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
@@ -178,7 +178,7 @@ def saveResults(dictionary):
         json.dump(dictionary, file, indent=4)
     print(f'\n"results.json" saved to: {directory_path}\n')
 
-#----------------------------------------------------------------------------------------------------
+#################################################################################################################################################
 
 # execution script to open, read, perform analysis, and save to dictionary
 for ticker in tickers:
