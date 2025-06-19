@@ -53,6 +53,8 @@ def import_stock(ticker):
             prices.append(float(line.split(',')[-1].strip()))
     return prices
 
+#######################################################################################################################
+
 #calculates previous "N_days" moving average along with error preventions ensuring "N_days" are available to calculate
 #pulls price data passed down from functions
 def calculate_Nday_avg(prices, N_days, day=0):
@@ -154,56 +156,6 @@ def calculate_macd(close_prices, day, short_period=12, long_period=26, signal_pe
 ###########################################################################################
 
 
-def MacdStrategey(ticker, prices):
-    N_days = 200# executes strategy over Nth number of days
-    
-    #initialization for transaction history analytics
-    total_profit = 0
-    buy = 0
-    first_buy = 0
-
-    print('-'*44)#creates a line for formatting
-    print(f'{ticker} Macd Strategy Over Period of: {N_days}')
-
-    #calculates buy/sell conditions and individual trade profits
-    for day, price in enumerate(prices):# keeps track of index position of each day and price value
-        if calculate_macd(prices, day) is None:# ensures at least "N_days" have past till "N_days" average calculates
-            pass
-        else:
-
-            #ensures today's price is at least 2% less than last "N_days" moving avg
-            #AND not to double up on stock inventory
-            if calculate_macd(prices, day) < 0 and buy != 0:#sell conditions
-                trade_profits = round(price - buy,2)#initiates purchase of stock
-                total_profit += trade_profits#adds to total profits
-                if day == len(prices)-1:# checks if day is most recent day
-                    print(f'Today you should sell at:\t$ {price}')
-                    print(f'trade profits:\t$ {trade_profits}')
-                if first_buy == 0:
-                    first_buy = buy# keeps track of price of first purchase for return on investment
-                buy = 0# resets stock inventory to zero
-
-            #ensures today's price is at least 2% greater than last "N_days" moving avg
-            # AND not to double up on stock inventory
-            elif calculate_macd(prices, day) > 0 and buy == 0:#buy conditions
-                if day == len(prices)-1:# checks if day is most recent day
-                    print(f'Today you should buy at:\t\t$ {price}')
-                buy = price# updates stock inventory to current purchase
-
-    #calculates ROI % 
-    try:
-        final_profit_percentage = f'{round((total_profit/first_buy)*100,2)}%'
-    except ZeroDivisionError:
-        final_profit_percentage = "0.00%"
-    total_profit = round(total_profit,2)
-
-    #prints final totals of profits and returns of a year of trade history         
-    print(f'total profits:\t$ {total_profit}')
-    print(f'first buy:\t$ {first_buy}')
-    print(f'percent return:\t  {final_profit_percentage}')
-    return total_profit, final_profit_percentage
-
-
 # calculates & prints trading strategy with at 2% difference from "N_days" moving average
 def meanReversionStrategey(ticker, prices, N_days=200):
     
@@ -213,7 +165,7 @@ def meanReversionStrategey(ticker, prices, N_days=200):
     first_buy = 0
 
     print('-'*44)#creates a line for formatting
-    print(f'{ticker} Mean Reversion Strategy Over Period of: {N_days}days')
+    print(f'{ticker} {N_days}day Mean Reversion Strategy Over Period of: {len(prices)} days')
 
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
@@ -260,7 +212,7 @@ def BollingerBandsStrategy(ticker, prices, N_days=200):
     first_buy = 0
 
     print('-'*44)#creates a line for formatting
-    print(f'{ticker} Simple Moving Average Strategy Output Over Period of: {N_days}days')
+    print(f'{ticker} {N_days}day Simple Moving Average Strategy Output Over Period of: {len(prices)} days')
 
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
@@ -296,6 +248,55 @@ def BollingerBandsStrategy(ticker, prices, N_days=200):
     print(f'total profits:\t$ {total_profit}')
     print(f'first buy:\t$ {first_buy}')
     print(f'percent return:\t  {final_profit_percentage}')
+    return total_profit, final_profit_percentage
+
+def MacdStrategey(ticker, prices):
+    N_days = 200# executes strategy over Nth number of days
+    
+    #initialization for transaction history analytics
+    total_profit = 0
+    buy = 0
+    first_buy = 0
+
+    print('-'*44)#creates a line for formatting
+    print(f'{ticker} Macd Strategy Over Period of: {len(prices)} days')
+
+    #calculates buy/sell conditions and individual trade profits
+    for day, price in enumerate(prices):# keeps track of index position of each day and price value
+        if calculate_macd(prices, day) is None:# ensures at least "N_days" have past till "N_days" average calculates
+            pass
+        else:
+
+            #ensures today's price is at least 2% less than last "N_days" moving avg
+            #AND not to double up on stock inventory
+            if calculate_macd(prices, day) < 0 and buy != 0:#sell conditions
+                trade_profits = round(price - buy,2)#initiates purchase of stock
+                total_profit += trade_profits#adds to total profits
+                if day == len(prices)-1:# checks if day is most recent day
+                    print(f'Today you should sell at:\t$ {price}')
+                    print(f'trade profits:\t$ {trade_profits}')
+                if first_buy == 0:
+                    first_buy = buy# keeps track of price of first purchase for return on investment
+                buy = 0# resets stock inventory to zero
+
+            #ensures today's price is at least 2% greater than last "N_days" moving avg
+            # AND not to double up on stock inventory
+            elif calculate_macd(prices, day) > 0 and buy == 0:#buy conditions
+                if day == len(prices)-1:# checks if day is most recent day
+                    print(f'Today you should buy at:\t\t$ {price}')
+                buy = price# updates stock inventory to current purchase
+
+    #calculates ROI % 
+    try:
+        final_profit_percentage = f'{round((total_profit/first_buy)*100,2)}%'
+    except ZeroDivisionError:
+        final_profit_percentage = "0.00%"
+    total_profit = round(total_profit,2)
+
+    #prints final totals of profits and returns of a year of trade history         
+    print(f'total profits:\t$ {total_profit}')
+    print(f'first buy:\t$ {first_buy}')
+    print(f'percent return:\t  {final_profit_percentage}')
     print('-'*44)#creates a line for formatting
     return total_profit, final_profit_percentage
 
@@ -305,11 +306,14 @@ returns = {}
 def analyze_stocks(ticker, prices):
     returns[f'{ticker}_prices'] = prices
     mr_profit, mr_returns = meanReversionStrategey(ticker, prices)
-    sma_profit, sma_returns = BollingerBandsStrategy(ticker, prices)
+    bb_profit, bb_returns = BollingerBandsStrategy(ticker, prices)
+    macd_profit, macd_returns = MacdStrategey(ticker, prices)
     returns[f'{ticker}_mr_profit'] = mr_profit
     returns[f'{ticker}_mr_returns'] = mr_returns
-    returns[f'{ticker}_sma_profit'] = sma_profit
-    returns[f'{ticker}_sma_returns'] = sma_returns
+    returns[f'{ticker}_bb_profit'] = bb_profit
+    returns[f'{ticker}_bb_returns'] = bb_returns
+    returns[f'{ticker}_macd_profit'] = macd_profit
+    returns[f'{ticker}_macd_returns'] = macd_returns
 
 #exports dictionary to .json file
 def saveResults(dictionary):
