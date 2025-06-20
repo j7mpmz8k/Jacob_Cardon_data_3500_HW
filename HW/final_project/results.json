@@ -1,5 +1,5 @@
 {
-    "today_action": "ACTION! Today you should sell AMZN at: $212.52\nACTION! Today you should buy COIN at: $295.29\nACTION! Today you should sell GOOG at: $173.98\n",
+    "today_action": "ACTION! Today you should buy GOOG at: $167.73\n",
     "Most Profitable": {
         "MR_strat": {
             "ticker": "TSLA",
@@ -6462,7 +6462,8 @@
             196.45,
             198.42,
             195.64,
-            196.58
+            196.58,
+            201.0
         ],
         "AAPL_mr_profit": 78.6,
         "AAPL_mr_returns": "162.06%",
@@ -12917,7 +12918,8 @@
             391.68,
             401.73,
             382.68,
-            378.04
+            378.04,
+            376.92
         ],
         "ADBE_mr_profit": 193.56,
         "ADBE_mr_returns": "286.76%",
@@ -16215,7 +16217,8 @@
             682.87,
             702.12,
             697.23,
-            695.77
+            695.77,
+            682.35
         ],
         "META_mr_profit": 82.75,
         "META_mr_returns": "340.39%",
@@ -22670,7 +22673,8 @@
             212.1,
             216.1,
             214.82,
-            212.52
+            212.52,
+            209.69
         ],
         "AMZN_mr_profit": -1226.85,
         "AMZN_mr_returns": "-3166.06%",
@@ -23729,7 +23733,8 @@
             242.71,
             261.57,
             253.85,
-            295.29
+            295.29,
+            308.38
         ],
         "COIN_mr_profit": 98.02,
         "COIN_mr_returns": "57.59%",
@@ -26562,7 +26567,8 @@
             175.88,
             177.94,
             177.23,
-            173.98
+            173.98,
+            167.73
         ],
         "GOOG_mr_profit": -1562.18,
         "GOOG_mr_returns": "-317.16%",
@@ -27547,7 +27553,8 @@
             72.6,
             76.75,
             74.95,
-            78.35
+            78.35,
+            78.5
         ],
         "HOOD_mr_profit": 3.34,
         "HOOD_mr_returns": "31.24%",
@@ -34002,7 +34009,8 @@
             141.97,
             144.69,
             144.12,
-            145.48
+            145.48,
+            143.85
         ],
         "NVDA_mr_profit": 5.52,
         "NVDA_mr_returns": "7.83%",
@@ -37777,7 +37785,8 @@
             325.31,
             329.13,
             316.35,
-            322.05
+            322.05,
+            322.16
         ],
         "TSLA_mr_profit": 585.16,
         "TSLA_mr_returns": "2364.28%",

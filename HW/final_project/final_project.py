@@ -362,6 +362,12 @@ results['today_action'] = today_action
 
 print('-'*60)
 print(today_action)
-print(most_profitable)
+
+print('Most profitable stock/strategies:')
+print(f'\tMean Reversion:\t\t{most_profitable["MR_strat"]['ticker']} @ ${most_profitable["MR_strat"]['total_profit']}')
+print(f'\tBollinger Bands:\t{most_profitable["BB_strat"]['ticker']} @ ${most_profitable["BB_strat"]['total_profit']}')
+print(f'\tMACD:\t\t\t{most_profitable["MACD_strat"]['ticker']} @ ${most_profitable["MACD_strat"]['total_profit']}')
+
+
 #writes saved dictionary to results.json file to directory path variable
 saveResults(results)
