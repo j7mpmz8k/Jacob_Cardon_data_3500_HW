@@ -2,14 +2,19 @@ import json
 import requests
 import time
 directory_path = '/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/final_project/'
-#tickers = ['AAPL', 'ADBE', 'META', 'AMZN', 'COIN', 'GOOG', 'HOOD', 'NVDA', 'TSLA', 'VOO']
-tickers = ['AAPL', 'ADBE']
+tickers = ['AAPL', 'ADBE', 'META', 'AMZN', 'COIN', 'GOOG', 'HOOD', 'NVDA', 'TSLA', 'VOO']
+today_action = ''
+most_profitable = {
+'MR_strat':{'ticker':'','total_profit':0},
+'BB_strat':{'ticker':'','total_profit':0},
+'MACD_strat':{'ticker':'','total_profit':0}
+}
 
 #reads all files from "stock_files" variable. 
 #Returns ticker and prices to be passed into trading strategy calculation functions along with functions to save to dictionary and .json file
 def import_stock(ticker):
     # req = requests.get(f'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=NG9C9EPVYBMQT0C8')
-    # time.sleep(12)
+    # time.sleep(3)
     # raw_data = json.loads(req.text)#.loads() used instead of .load() since json dictionary is contained within a string
     # #listing out available keys
     # key1 = 'Time Series (Daily)'
@@ -143,7 +148,7 @@ def calculate_macd_series(close_prices, short_period=12, long_period=26, signal_
       histogram.append(round(histogram_value, 4))
 
     # Return the three lists, which are now all aligned and the same length
-    return macd_for_histogram, signal_line, histogram
+    return histogram
 
 
 ###########################################################################################
@@ -156,8 +161,9 @@ def MeanReversionStrategey(ticker, prices, N_days=200):
     total_profit = 0
     buy = 0
     first_buy = 0
+    global today_action
 
-    print('-'*44)#creates a line for formatting
+    print('-'*60)#creates a line for formatting
     print(f'{ticker} {N_days}day Mean Reversion Strategy Over Period of: {len(prices)} days')
 
     #calculates buy/sell conditions and individual trade profits
@@ -170,8 +176,7 @@ def MeanReversionStrategey(ticker, prices, N_days=200):
                 trade_profits = round(price - buy,2)#initiates purchase of stock
                 total_profit += trade_profits#adds to total profits
                 if day == len(prices)-1:# checks if day is most recent day
-                    print(f'Today you should sell at:\t$ {price}')
-                    print(f'trade profits:\t$ {trade_profits}')
+                    today_action += f'ACTION! Today you should sell {ticker} at: ${price}\n'
                 if first_buy == 0:
                     first_buy = buy# keeps track of price of first purchase for return on investment
                 buy = 0# resets stock inventory to zero
@@ -180,7 +185,7 @@ def MeanReversionStrategey(ticker, prices, N_days=200):
             # AND not to double up on stock inventory
             elif price < calculate_Nday_avg(prices, N_days, day)*0.98 and buy == 0:#buy conditions
                 if day == len(prices)-1:# checks if day is most recent day
-                    print(f'Today you should buy at:\t\t$ {price}')
+                    today_action += f'ACTION! Today you should buy {ticker} at: ${price}\n'
                 buy = price# updates stock inventory to current purchase
 
     #calculates ROI % 
@@ -190,10 +195,13 @@ def MeanReversionStrategey(ticker, prices, N_days=200):
         final_profit_percentage = "0.00%"
     total_profit = round(total_profit,2)
 
-    #prints final totals of profits and returns of a year of trade history         
+    if total_profit > most_profitable['MR_strat']['total_profit']:
+        most_profitable['MR_strat']['total_profit'] = total_profit
+        most_profitable['MR_strat']['ticker'] = ticker
+    #prints final totals of profits and returns of a year of trade history
     print(f'total profits:\t$ {total_profit}')
     print(f'first buy:\t$ {first_buy}')
-    print(f'percent return:\t  {final_profit_percentage}')
+    print(f'percent return:\t  {final_profit_percentage}') 
     return total_profit, final_profit_percentage
 
 # calculates & prints trading strategy with any difference from "N_days" moving average inverted from MeanReversionStrategey
@@ -203,9 +211,10 @@ def BollingerBandsStrategy(ticker, prices, N_days=200):
     total_profit = 0
     buy = 0
     first_buy = 0
+    global today_action
 
-    print('-'*44)#creates a line for formatting
-    print(f'{ticker} {N_days}day Simple Moving Average Strategy Output Over Period of: {len(prices)} days')
+    print('-'*60)#creates a line for formatting
+    print(f'{ticker} {N_days}day Bollinger Bands Strategy Over Period of: {len(prices)} days')
 
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
@@ -217,8 +226,7 @@ def BollingerBandsStrategy(ticker, prices, N_days=200):
                 trade_profits = round(price - buy,2)#initiates purchase of stock
                 total_profit += trade_profits#adds to total profits
                 if day == len(prices)-1:# checks if day is most recent day
-                    print(f'Today you should sell at:\t$ {price}')
-                    print(f'trade profits:\t$ {trade_profits}')
+                    today_action += f'ACTION! Today you should sell {ticker} at: ${price}\n'
                 if first_buy == 0:
                     first_buy = buy# keeps track of price of first purchase for return on investment
                 buy = 0# resets stock inventory to zero
@@ -227,7 +235,7 @@ def BollingerBandsStrategy(ticker, prices, N_days=200):
             # AND not to double up on stock inventory
             elif price > calculate_Nday_avg(prices, N_days, day)*1.05 and buy == 0:#buy conditions
                 if day == len(prices)-1:# checks if day is most recent day
-                    print(f'Today you should buy at:\t\t$ {price}')
+                    today_action += f'ACTION! Today you should buy {ticker} at: ${price}\n'
                 buy = price# updates stock inventory to current purchase
 
     #calculates ROI % 
@@ -237,10 +245,14 @@ def BollingerBandsStrategy(ticker, prices, N_days=200):
         final_profit_percentage = "0.00%"
     total_profit = round(total_profit,2)
 
-    #prints final totals of profits and returns of a year of trade history         
+    if total_profit > most_profitable['BB_strat']['total_profit']:
+        most_profitable['BB_strat']['total_profit'] = total_profit
+        most_profitable['BB_strat']['ticker'] = ticker
+
+    #prints final totals of profits and returns of a year of trade history
     print(f'total profits:\t$ {total_profit}')
     print(f'first buy:\t$ {first_buy}')
-    print(f'percent return:\t  {final_profit_percentage}')
+    print(f'percent return:\t  {final_profit_percentage}') 
     return total_profit, final_profit_percentage
 
 def MacdStrategey(ticker, prices):
@@ -253,13 +265,14 @@ def MacdStrategey(ticker, prices):
     total_profit = 0
     buy = 0
     first_buy = 0
+    global today_action
 
-    print('-'*44)
+    print('-'*60)
     print(f'{ticker} Macd Strategy Over Period of: {len(prices)} days')
 
     # --- PERFORMANCE FIX ---
     # 1. Calculate the MACD, Signal, and Histogram series ONCE before the loop.
-    macd_line, signal_line, histogram = calculate_macd_series(prices)
+    histogram = calculate_macd_series(prices)
 
     # 2. If the histogram is empty, it means there wasn't enough data. Exit early.
     if not histogram:
@@ -267,7 +280,7 @@ def MacdStrategey(ticker, prices):
         print(f'total profits:\t$ 0.00')
         print(f'first buy:\t$ 0.00')
         print(f'percent return:\t  0.00%')
-        print('-'*44)
+        print('-'*60)
         return 0, "0.00%"
 
     # 3. Determine the starting day for our strategy. The MACD data doesn't
@@ -276,7 +289,7 @@ def MacdStrategey(ticker, prices):
 
     # 4. Loop through the pre-calculated histogram data.
     for i in range(len(histogram)):
-        current_day_in_prices = start_day_offset + i
+        current_day_in_prices = start_day_offset+i
         price = prices[current_day_in_prices]
         hist_value = histogram[i]
 
@@ -284,17 +297,16 @@ def MacdStrategey(ticker, prices):
         if hist_value < 0 and buy != 0:
             trade_profits = round(price - buy, 2)
             total_profit += trade_profits
-            if current_day_in_prices == len(prices) - 1: # Check if it is the most recent day
-                print(f'Today you should sell at:\t$ {price}')
-                print(f'trade profits:\t$ {trade_profits}')
+            if current_day_in_prices == len(prices)-1: # Check if it is the most recent day
+                today_action += f'ACTION! Today you should sell {ticker} at: ${price}\n'
             if first_buy == 0:
                 first_buy = buy
             buy = 0 # Stock sold
 
         # Buy condition: histogram crosses above zero and we don't own the stock
         elif hist_value > 0 and buy == 0:
-            if current_day_in_prices == len(prices) - 1: # Check if it is the most recent day
-                print(f'Today you should buy at:\t\t$ {price}')
+            if current_day_in_prices == len(prices)-1: # Check if it is the most recent day
+                today_action += f'ACTION! Today you should buy {ticker} at: ${price}\n'
             buy = price # Stock bought
 
     # ROI and final printout logic (remains the same)
@@ -304,26 +316,34 @@ def MacdStrategey(ticker, prices):
         final_profit_percentage = "0.00%"
     total_profit = round(total_profit, 2)
 
+    if total_profit > most_profitable['MACD_strat']['total_profit']:
+        most_profitable['MACD_strat']['total_profit'] = total_profit
+        most_profitable['MACD_strat']['ticker'] = ticker
+
     print(f'total profits:\t$ {total_profit}')
     print(f'first buy:\t$ {first_buy}')
     print(f'percent return:\t  {final_profit_percentage}')
-    print('-'*44)
+    print('-'*60)
     return total_profit, final_profit_percentage
 
 #sets up dictionary of trading analysis preparatory to exporting to .json
-returns = {}
+results = {
+'today_action':'',
+"Most Profitable":{},
+'analysis':{},
+}
 # executes calculations of trading strategies
 def analyze_stocks(ticker, prices):
-    returns[f'{ticker}_prices'] = prices
+    results['analysis'][f'{ticker}_prices'] = prices
     mr_profit, mr_returns = MeanReversionStrategey(ticker, prices)
     bb_profit, bb_returns = BollingerBandsStrategy(ticker, prices)
     macd_profit, macd_returns = MacdStrategey(ticker, prices)
-    returns[f'{ticker}_mr_profit'] = mr_profit
-    returns[f'{ticker}_mr_returns'] = mr_returns
-    returns[f'{ticker}_bb_profit'] = bb_profit
-    returns[f'{ticker}_bb_returns'] = bb_returns
-    returns[f'{ticker}_macd_profit'] = macd_profit
-    returns[f'{ticker}_macd_returns'] = macd_returns
+    results['analysis'][f'{ticker}_mr_profit'] = mr_profit
+    results['analysis'][f'{ticker}_mr_returns'] = mr_returns
+    results['analysis'][f'{ticker}_bb_profit'] = bb_profit
+    results['analysis'][f'{ticker}_bb_returns'] = bb_returns
+    results['analysis'][f'{ticker}_macd_profit'] = macd_profit
+    results['analysis'][f'{ticker}_macd_returns'] = macd_returns
 
 #exports dictionary to .json file
 def saveResults(dictionary):
@@ -337,6 +357,11 @@ def saveResults(dictionary):
 for ticker in tickers:
     prices = import_stock(ticker)# finds files from directory variable, reads data and extracts ticker from file name and price data within file
     analyze_stocks(ticker, prices)# calculates trading trading strategies and saves analysis to dictionary
+results["Most Profitable"] = most_profitable
+results['today_action'] = today_action
 
+print('-'*60)
+print(today_action)
+print(most_profitable)
 #writes saved dictionary to results.json file to directory path variable
-saveResults(returns)
+saveResults(results)
