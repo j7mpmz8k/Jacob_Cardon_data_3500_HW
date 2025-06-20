@@ -143,7 +143,7 @@ def calculate_macd_series(close_prices, short_period=12, long_period=26, signal_
       histogram.append(round(histogram_value, 4))
 
     # Return the three lists, which are now all aligned and the same length
-    return macd_for_histogram, signal_line, histogram
+    return histogram
 
 
 ###########################################################################################
@@ -205,7 +205,7 @@ def BollingerBandsStrategy(ticker, prices, N_days=200):
     first_buy = 0
 
     print('-'*44)#creates a line for formatting
-    print(f'{ticker} {N_days}day Simple Moving Average Strategy Output Over Period of: {len(prices)} days')
+    print(f'{ticker} {N_days}day Bollinger Bands Strategy Over Period of: {len(prices)} days')
 
     #calculates buy/sell conditions and individual trade profits
     for day, price in enumerate(prices):# keeps track of index position of each day and price value
@@ -259,7 +259,7 @@ def MacdStrategey(ticker, prices):
 
     # --- PERFORMANCE FIX ---
     # 1. Calculate the MACD, Signal, and Histogram series ONCE before the loop.
-    macd_line, signal_line, histogram = calculate_macd_series(prices)
+    histogram = calculate_macd_series(prices)
 
     # 2. If the histogram is empty, it means there wasn't enough data. Exit early.
     if not histogram:
