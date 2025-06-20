@@ -10,10 +10,17 @@ most_profitable = {
 'MACD_strat':{'ticker':'','total_profit':0}
 }
 
+#sets up dictionary of trading analysis preparatory to exporting to .json
+results = {
+'today_action':'',
+"Most Profitable":{},
+'analysis':{},
+}
+
 #reads all files from "stock_files" variable. 
 #Returns ticker and prices to be passed into trading strategy calculation functions along with functions to save to dictionary and .json file
 def import_stock(ticker):
-    # req = requests.get(f'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=NG9C9EPVYBMQT0C8')
+    # req = requests.get(f'http://www.multipliervantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=NG9C9EPVYBMQT0C8')
     # time.sleep(3)
     # raw_data = json.loads(req.text)#.loads() used instead of .load() since json dictionary is contained within a string
     # #listing out available keys
@@ -69,61 +76,32 @@ def calculate_Nday_avg(prices, N_days, day=0):
         return print(f'\nERROR! Day must be no less than {N_days} and no more than {len(prices)} \n')
     return sum(prices[day1:dayN])/N_days
 
-def calculate_ema(data, period):
-    """
-    Calculates the Exponential Moving Average (EMA) for a given list of data.
-
-    Args:
-        data (list of float): A list of numerical data (e.g., closing prices).
-        period (int): The period for the EMA calculation.
-
-    Returns:
-        list of float: A list containing the EMA values. Returns an empty list
-                       if the data is insufficient for the period.
-    """
-    if len(data) < period:
+def calculate_ema(prices, period):
+    if len(prices) < period:
         return []
 
-    ema_values = []
     # The multiplier for smoothing.
     multiplier = 2 / (period + 1)
     
     # The first EMA is a simple moving average of the first 'period' prices.
-    sma = sum(data[:period]) / period
-    ema_values.append(sma)
+    sma = sum(prices[:period]) / period
+    ema_values = [sma]
 
-    # Calculate the subsequent EMA values
-    for i in range(period, len(data)):
-        current_price = data[i]
-        previous_ema = ema_values[-1]
-        current_ema = (current_price - previous_ema) * multiplier + previous_ema
+    for i in range(period, len(prices)):
+        current_ema = (prices[i] * multiplier) + (ema_values[-1] * (1 - multiplier))
         ema_values.append(current_ema)
         
     return ema_values
 
-def calculate_macd_series(close_prices, short_period=12, long_period=26, signal_period=9):
-    """
-    Calculates the MACD line, Signal line, and Histogram for the entire dataset.
-
-    Args:
-        close_prices (list of float): A list of closing prices.
-        short_period (int): The period for the short-term EMA.
-        long_period (int): The period for the long-term EMA.
-        signal_period (int): The period for the Signal line EMA.
-
-    Returns:
-        tuple: A tuple containing three lists (macd_line, signal_line, histogram).
-               The lists are aligned and of the same length.
-               Returns ([], [], []) if the data is insufficient.
-    """
+def calculate_macd_series(prices, short_period=12, long_period=26, signal_period=9):
     # Ensure there's enough data for a single MACD value to be calculated
-    if len(close_prices) < long_period + signal_period:
-        print("Not enough data to calculate MACD series.")
+    if len(prices) < long_period + signal_period:
+        print("Insufficent price history")
         return [], [], []
 
     # Calculate the 12-period and 26-period EMAs
-    ema_short = calculate_ema(close_prices, short_period)
-    ema_long = calculate_ema(close_prices, long_period)
+    ema_short = calculate_ema(prices, short_period)
+    ema_long = calculate_ema(prices, long_period)
 
     # Align the shorter EMA with the longer one to calculate the MACD line
     alignment_offset = long_period - short_period
@@ -326,12 +304,7 @@ def MacdStrategey(ticker, prices):
     print('-'*60)
     return total_profit, final_profit_percentage
 
-#sets up dictionary of trading analysis preparatory to exporting to .json
-results = {
-'today_action':'',
-"Most Profitable":{},
-'analysis':{},
-}
+
 # executes calculations of trading strategies
 def analyze_stocks(ticker, prices):
     results['analysis'][f'{ticker}_prices'] = prices
@@ -362,6 +335,12 @@ results['today_action'] = today_action
 
 print('-'*60)
 print(today_action)
-print(most_profitable)
+
+print('Most profitable stock/strategies:')
+print(f'\tMean Reversion(200day):\t\t\t\t{most_profitable["MR_strat"]['ticker']} total profit @ ${most_profitable["MR_strat"]['total_profit']}')
+print(f'\tBollinger Bands(200day):\t\t\t{most_profitable["BB_strat"]['ticker']} total profit @ ${most_profitable["BB_strat"]['total_profit']}')
+print(f'\tMACD(short-12day long-26day signal-9day):\t{most_profitable["MACD_strat"]['ticker']} total profit @ ${most_profitable["MACD_strat"]['total_profit']}')
+
+
 #writes saved dictionary to results.json file to directory path variable
 saveResults(results)
