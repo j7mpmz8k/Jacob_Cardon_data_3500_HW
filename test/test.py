@@ -6,3 +6,4 @@ schol_api = 'http://www.multipliervantage.co/query?function=TIME_SERIES_DAILY&sy
 
 personal_api = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=SD73U674WTF3MQAC'
 'BP8GODW1S3NADYB3'
+'KSH53YGYAHBD4J02'
