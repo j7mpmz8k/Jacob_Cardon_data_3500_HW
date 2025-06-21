@@ -20,43 +20,43 @@ results = {
 #reads all files from "stock_files" variable. 
 #Returns ticker and prices to be passed into trading strategy calculation functions along with functions to save to dictionary and .json file
 def import_stock(ticker):
-    # req = requests.get(f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=KSH53YGYAHBD4J02')
-    # time.sleep(12)
-    # raw_data = json.loads(req.text)#.loads() used instead of .load() since json dictionary is contained within a string
-    # #listing out available keys
-    # key1 = 'Time Series (Daily)'
-    # key2_date = '2025-06-16'# Note! many more dates
-    # key3_open = '1. open'
-    # key3_high = '2. high'
-    # key3_low = '3. low'
-    # key3_close = '4. close'
-    # key3_volume = '5. volume'
+    req = requests.get(f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=KSH53YGYAHBD4J02')
+    time.sleep(12)
+    raw_data = json.loads(req.text)#.loads() used instead of .load() since json dictionary is contained within a string
+    #listing out available keys
+    key1 = 'Time Series (Daily)'
+    key2_date = '2025-06-16'# Note! many more dates
+    key3_open = '1. open'
+    key3_high = '2. high'
+    key3_low = '3. low'
+    key3_close = '4. close'
+    key3_volume = '5. volume'
 
-    # try:
-    #     with open(f'{directory_path}{ticker}.csv', 'r') as csv_file:
-    #         lines = csv_file.readlines()
-    #         last_date = lines[-1].split(',')[0]
-    #     new_lines = []
+    try:
+        with open(f'{directory_path}{ticker}.csv', 'r') as csv_file:
+            lines = csv_file.readlines()
+            last_date = lines[-1].split(',')[0]
+        new_lines = []
 
-    #     #pulls all close prices in all dates
-    #     for date_key in raw_data[key1]:
-    #         if date_key > last_date:
-    #             new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
-    #     new_lines.reverse()
+        #pulls all close prices in all dates
+        for date_key in raw_data[key1]:
+            if date_key > last_date:
+                new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
+        new_lines.reverse()
 
-    #     with open(f'{directory_path}{ticker}.csv', 'a') as csv_file:
-    #         csv_file.writelines(new_lines)
-    #     print('found existing file, appending new data')
-    # except (FileNotFoundError, IndexError):
-    #     print('\nERROR! file not found or file is empty. Recreating file.')
-    #     new_lines = []
-    #     #pulls all close prices in all dates
-    #     for date_key in raw_data[key1]:
-    #         new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
-    #     new_lines.reverse()
+        with open(f'{directory_path}{ticker}.csv', 'a') as csv_file:
+            csv_file.writelines(new_lines)
+        print('found existing file, appending new data')
+    except (FileNotFoundError, IndexError):
+        print('\nERROR! file not found or file is empty. Recreating file.')
+        new_lines = []
+        #pulls all close prices in all dates
+        for date_key in raw_data[key1]:
+            new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
+        new_lines.reverse()
 
-    #     with open(f'{directory_path}{ticker}.csv', 'w') as csv_file:
-    #         csv_file.writelines(new_lines)
+        with open(f'{directory_path}{ticker}.csv', 'w') as csv_file:
+            csv_file.writelines(new_lines)
 
     with open(f'{directory_path}{ticker}.csv', 'r') as csv_file:
         lines = csv_file.readlines()
@@ -188,7 +188,7 @@ def MeanReversionStrategey(ticker, prices, N_days=200):
     print(f'percent return:\t  {final_profit_percentage}') 
     return total_profit, final_profit_percentage
 
-# calculates & prints trading strategy with any difference from "N_days" moving average inverted from MeanReversionStrategey
+# calculates & prints trading strategy with any difference from "N_days" moving average*5% inverted from MeanReversionStrategey
 def BollingerBandsStrategy(ticker, prices, N_days=200):
 
     #initialization for transaction history analytics
