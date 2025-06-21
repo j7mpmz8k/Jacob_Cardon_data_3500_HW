@@ -20,43 +20,43 @@ results = {
 #reads all files from "stock_files" variable. 
 #Returns ticker and prices to be passed into trading strategy calculation functions along with functions to save to dictionary and .json file
 def import_stock(ticker):
-    req = requests.get(f'http://www.multipliervantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=NG9C9EPVYBMQT0C8')
-    time.sleep(12)
-    raw_data = json.loads(req.text)#.loads() used instead of .load() since json dictionary is contained within a string
-    #listing out available keys
-    key1 = 'Time Series (Daily)'
-    key2_date = '2025-06-16'# Note! many more dates
-    key3_open = '1. open'
-    key3_high = '2. high'
-    key3_low = '3. low'
-    key3_close = '4. close'
-    key3_volume = '5. volume'
+    # req = requests.get(f'http://www.multipliervantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=NG9C9EPVYBMQT0C8')
+    # time.sleep(12)
+    # raw_data = json.loads(req.text)#.loads() used instead of .load() since json dictionary is contained within a string
+    # #listing out available keys
+    # key1 = 'Time Series (Daily)'
+    # key2_date = '2025-06-16'# Note! many more dates
+    # key3_open = '1. open'
+    # key3_high = '2. high'
+    # key3_low = '3. low'
+    # key3_close = '4. close'
+    # key3_volume = '5. volume'
 
-    try:
-        with open(f'{directory_path}{ticker}.csv', 'r') as csv_file:
-            lines = csv_file.readlines()
-            last_date = lines[-1].split(',')[0]
-        new_lines = []
+    # try:
+    #     with open(f'{directory_path}{ticker}.csv', 'r') as csv_file:
+    #         lines = csv_file.readlines()
+    #         last_date = lines[-1].split(',')[0]
+    #     new_lines = []
 
-        #pulls all close prices in all dates
-        for date_key in raw_data[key1]:
-            if date_key > last_date:
-                new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_volume]),2)},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
-        new_lines.reverse()
+    #     #pulls all close prices in all dates
+    #     for date_key in raw_data[key1]:
+    #         if date_key > last_date:
+    #             new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_volume]),2)},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
+    #     new_lines.reverse()
 
-        with open(f'{directory_path}{ticker}.csv', 'a') as csv_file:
-            csv_file.writelines(new_lines)
-        print('found existing file, appending new data')
-    except (FileNotFoundError, IndexError):
-        print('\nERROR! file not found or file is empty. Recreating file.')
-        new_lines = []
-        #pulls all close prices in all dates
-        for date_key in raw_data[key1]:
-            new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_volume]),2)},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
-        new_lines.reverse()
+    #     with open(f'{directory_path}{ticker}.csv', 'a') as csv_file:
+    #         csv_file.writelines(new_lines)
+    #     print('found existing file, appending new data')
+    # except (FileNotFoundError, IndexError):
+    #     print('\nERROR! file not found or file is empty. Recreating file.')
+    #     new_lines = []
+    #     #pulls all close prices in all dates
+    #     for date_key in raw_data[key1]:
+    #         new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_volume]),2)},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
+    #     new_lines.reverse()
 
-        with open(f'{directory_path}{ticker}.csv', 'w') as csv_file:
-            csv_file.writelines(new_lines)
+    #     with open(f'{directory_path}{ticker}.csv', 'w') as csv_file:
+    #         csv_file.writelines(new_lines)
 
     with open(f'{directory_path}{ticker}.csv', 'r') as csv_file:
         lines = csv_file.readlines()
@@ -77,35 +77,40 @@ def calculate_Nday_avg(prices, N_days, day=0):
     return sum(prices[day1:dayN])/N_days
 
 def calculate_ema(prices, period):
-    if len(prices) < period:
+    if len(prices) < period:#ensures minimum price history has passed
         return []
-
     # The multiplier for smoothing.
     multiplier = 2 / (period + 1)
-    
-    # The first EMA is a simple moving average of the first 'period' prices.
     sma = sum(prices[:period]) / period
-    ema_values = [sma]
+    ema_values = [sma]#first ema value is sma acting as a starting point for future ema calculations
 
+    #creates a stored list of ema values corresponding to each day of each closing price
     for i in range(period, len(prices)):
         current_ema = (prices[i] * multiplier) + (ema_values[-1] * (1 - multiplier))
         ema_values.append(current_ema)
-        
+
     return ema_values
 
-def calculate_macd_series(prices, short_period=12, long_period=26, signal_period=9):
+'''
+macd is is a calculation dirived from (shortEMA - longEMA = the macd line)
+the buy/sell signal is the (macd line - signalEMA = histogram)
+when histogram is negative, it signals a downtrend signaling to sell
+when histogram is positive, it signals an uptrend signaling to buy
+'''
+def calculate_macd(prices, short_period=12, long_period=26, signal_period=9):
     # Ensure there's enough data for a single MACD value to be calculated
     if len(prices) < long_period + signal_period:
         print("Insufficent price history")
         return []
 
-    # Calculate the 12-period and 26-period EMAs
+    # Calculates long/short ema...a list of daily long/short ema values are returned
     ema_short = calculate_ema(prices, short_period)
     ema_long = calculate_ema(prices, long_period)
 
-    # Align the shorter EMA with the longer one to calculate the MACD line
+    # compensates for minimum price history required to calculate short vs long EMA
     alignment_offset = long_period - short_period
     
+    # macd line = shortEMA - longEMA
     macd_line = []
     for i in range(len(ema_long)):
         macd_value = ema_short[i + alignment_offset] - ema_long[i]
@@ -120,13 +125,13 @@ def calculate_macd_series(prices, short_period=12, long_period=26, signal_period
     # The signal line is shorter, so we trim the start of the macd_line to match
     macd_for_histogram = macd_line[len(macd_line) - len(signal_line):]
     
+    #histogram = macd - signalEMA
     histogram = []
     for i in range(len(signal_line)):
       histogram_value = macd_for_histogram[i] - signal_line[i]
       histogram.append(round(histogram_value, 4))
 
-    # Return the three lists, which are now all aligned and the same length
-    return histogram
+    return histogram #outputs list of daily historgram data.
 
 
 ###########################################################################################
@@ -139,7 +144,7 @@ def MeanReversionStrategey(ticker, prices, N_days=200):
     total_profit = 0
     buy = 0
     first_buy = 0
-    global today_action
+    global today_action# tells user if they should buy or sell, prints message at end
 
     print('-'*60)#creates a line for formatting
     print(f'{ticker} {N_days}day Mean Reversion Strategy Over Period of: {len(prices)} days')
@@ -173,6 +178,7 @@ def MeanReversionStrategey(ticker, prices, N_days=200):
         final_profit_percentage = "0.00%"
     total_profit = round(total_profit,2)
 
+    #check if stock is most profitable in strategy, updates if most profitable
     if total_profit > most_profitable['MR_strat']['total_profit']:
         most_profitable['MR_strat']['total_profit'] = total_profit
         most_profitable['MR_strat']['ticker'] = ticker
@@ -189,7 +195,7 @@ def BollingerBandsStrategy(ticker, prices, N_days=200):
     total_profit = 0
     buy = 0
     first_buy = 0
-    global today_action
+    global today_action# tells user if they should buy or sell, prints message at end
 
     print('-'*60)#creates a line for formatting
     print(f'{ticker} {N_days}day Bollinger Bands Strategy Over Period of: {len(prices)} days')
@@ -223,6 +229,7 @@ def BollingerBandsStrategy(ticker, prices, N_days=200):
         final_profit_percentage = "0.00%"
     total_profit = round(total_profit,2)
 
+    #check if stock is most profitable in strategy, updates if most profitable
     if total_profit > most_profitable['BB_strat']['total_profit']:
         most_profitable['BB_strat']['total_profit'] = total_profit
         most_profitable['BB_strat']['ticker'] = ticker
@@ -234,70 +241,63 @@ def BollingerBandsStrategy(ticker, prices, N_days=200):
     return total_profit, final_profit_percentage
 
 def MacdStrategey(ticker, prices):
-    """
-    Calculates and prints a trading strategy based on the MACD indicator.
-    
-    This function is optimized to calculate the MACD series once, preventing
-    performance issues on large datasets.
-    """
+    #initialization for transaction history analytics
     total_profit = 0
     buy = 0
     first_buy = 0
-    global today_action
+    global today_action# tells user if they should buy or sell, prints message at end
 
     print('-'*60)
     print(f'{ticker} Macd Strategy Over Period of: {len(prices)} days')
 
-    # --- PERFORMANCE FIX ---
-    # 1. Calculate the MACD, Signal, and Histogram series ONCE before the loop.
-    histogram = calculate_macd_series(prices)
-
-    # 2. If the histogram is empty, it means there wasn't enough data. Exit early.
-    if not histogram:
-        print("Could not perform MACD strategy due to insufficient price data.")
+    #returns the Histogram buy/sell values from after calculating macd line - signalEMA
+    histogram = calculate_macd(prices)
+    #If the histogram is empty, ussually due to less than 35 days... 26days from(longEMA) +9days from (signalEMA)= 35 days minimum
+    if len(histogram) == 0:
+        print("Error! Insufficient price data.")
         print(f'total profits:\t$ 0.00')
         print(f'first buy:\t$ 0.00')
         print(f'percent return:\t  0.00%')
         print('-'*60)
-        return 0, "0.00%"
+        return 0, "0.00%"# returns zero profits and zero returns if histogram data is empty
 
-    # 3. Determine the starting day for our strategy. The MACD data doesn't
-    #    exist for the early days, so we offset our loop to where it starts.
+    #histogram data requires minimum time passed, can't start from first day(0), offset aligns the index's
     start_day_offset = len(prices) - len(histogram)
 
-    # 4. Loop through the pre-calculated histogram data.
+    # calculates trading from histogram data, negative=sell positive=buy
     for i in range(len(histogram)):
-        current_day_in_prices = start_day_offset+i
-        price = prices[current_day_in_prices]
+        alligned_price_day_index = start_day_offset+i#ensures that the first day of histogram index is aligned with index of price day
+        price = prices[alligned_price_day_index]#finds price corresponding to same day of histogram day
         hist_value = histogram[i]
 
-        # Sell condition: histogram crosses below zero and we own the stock
+        # Sell condition: histogram falls negative
         if hist_value < 0 and buy != 0:
             trade_profits = round(price - buy, 2)
             total_profit += trade_profits
-            if current_day_in_prices == len(prices)-1: # Check if it is the most recent day
+            if alligned_price_day_index == len(prices)-1: # Check if it is the most recent day
                 today_action += f'ACTION! Today you should sell {ticker} at: ${price}\n'
-            if first_buy == 0:
+            if first_buy == 0:# checks if inventory is zero, avoids buying more than 1
                 first_buy = buy
             buy = 0 # Stock sold
 
-        # Buy condition: histogram crosses above zero and we don't own the stock
+        # Buy condition: histogram becomes positive
         elif hist_value > 0 and buy == 0:
-            if current_day_in_prices == len(prices)-1: # Check if it is the most recent day
+            if alligned_price_day_index == len(prices)-1: # Check if it is the most recent day
                 today_action += f'ACTION! Today you should buy {ticker} at: ${price}\n'
-            buy = price # Stock bought
+            buy = price # Stock bought at current price in loop
 
-    # ROI and final printout logic (remains the same)
+    #calculates ROI % 
     try:
         final_profit_percentage = f'{round((total_profit / first_buy) * 100, 2)}%'
     except ZeroDivisionError:
         final_profit_percentage = "0.00%"
     total_profit = round(total_profit, 2)
 
+    #check if stock is most profitable in strategy, updates if most profitable
     if total_profit > most_profitable['MACD_strat']['total_profit']:
         most_profitable['MACD_strat']['total_profit'] = total_profit
         most_profitable['MACD_strat']['ticker'] = ticker
-
+    
     print(f'total profits:\t$ {total_profit}')
     print(f'first buy:\t$ {first_buy}')
     print(f'percent return:\t  {final_profit_percentage}')
@@ -305,7 +305,7 @@ def MacdStrategey(ticker, prices):
     return total_profit, final_profit_percentage
 
 
-# executes calculations of trading strategies
+# executes calculations of trading strategies, adds to results dictionary
 def analyze_stocks(ticker, prices):
     results['analysis'][f'{ticker}_prices'] = prices
     mr_profit, mr_returns = MeanReversionStrategey(ticker, prices)
@@ -334,12 +334,13 @@ results["Most Profitable"] = most_profitable
 results['today_action'] = today_action
 
 print('-'*60)
-print(today_action)
+print(today_action)# tells user if current day is a buy or sell signal for each stock
 
-print('Most profitable stock/strategies:')
-print(f'\tMean Reversion(200day):\t\t\t\t{most_profitable["MR_strat"]['ticker']} total profit @ ${most_profitable["MR_strat"]['total_profit']}')
-print(f'\tBollinger Bands(200day):\t\t\t{most_profitable["BB_strat"]['ticker']} total profit @ ${most_profitable["BB_strat"]['total_profit']}')
-print(f'\tMACD(short-12day long-26day signal-9day):\t{most_profitable["MACD_strat"]['ticker']} total profit @ ${most_profitable["MACD_strat"]['total_profit']}')
+#reveals most profitable stocks for each strategy for lifetime of price history
+print('Most lifetime profitable stock/strategies:')
+print(f'\tMean Reversion(200dayAVG):\t\t\t\t{most_profitable["MR_strat"]['ticker']} total profit @ ${most_profitable["MR_strat"]['total_profit']}')
+print(f'\tBollinger Bands(200dayAVG):\t\t\t\t{most_profitable["BB_strat"]['ticker']} total profit @ ${most_profitable["BB_strat"]['total_profit']}')
+print(f'\tMACD(shortEMA=12day longEMA=26day signalEMA-9day):\t{most_profitable["MACD_strat"]['ticker']} total profit @ ${most_profitable["MACD_strat"]['total_profit']}')
 
 
 #writes saved dictionary to results.json file to directory path variable
