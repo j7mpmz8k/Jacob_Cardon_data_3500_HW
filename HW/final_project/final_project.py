@@ -32,13 +32,14 @@ def import_stock(ticker):
     key3_close = '4. close'
     key3_volume = '5. volume'
 
+    #tries to update and append data from api
     try:
         with open(f'{directory_path}{ticker}.csv', 'r') as csv_file:
             lines = csv_file.readlines()
             last_date = lines[-1].split(',')[0]
         new_lines = []
 
-        #pulls all close prices in all dates
+        #pulls all close prices and all dates
         for date_key in raw_data[key1]:
             if date_key > last_date:
                 new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
@@ -47,6 +48,7 @@ def import_stock(ticker):
         with open(f'{directory_path}{ticker}.csv', 'a') as csv_file:
             csv_file.writelines(new_lines)
         print('found existing file, appending new data')
+    #if file is empty or does not exist, file is recreated
     except (FileNotFoundError, IndexError):
         print('\nERROR! file not found or file is empty. Recreating file.')
         new_lines = []
@@ -55,9 +57,11 @@ def import_stock(ticker):
             new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
         new_lines.reverse()
 
+        #writes extracted data to a csv file for each stock
         with open(f'{directory_path}{ticker}.csv', 'w') as csv_file:
             csv_file.writelines(new_lines)
 
+    #reads newly refreshed data for analysis
     with open(f'{directory_path}{ticker}.csv', 'r') as csv_file:
         lines = csv_file.readlines()
         prices = []
