@@ -2,7 +2,7 @@ import json
 import requests
 import time
 directory_path = '/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/final_project/'
-tickers = ['AAPL']#, 'ADBE', 'META', 'AMZN', 'COIN', 'GOOG', 'HOOD', 'NVDA', 'TSLA', 'VOO']
+tickers = ['AAPL', 'ADBE', 'META', 'AMZN', 'COIN', 'GOOG', 'HOOD', 'NVDA', 'TSLA', 'VOO']
 today_action = ''
 most_profitable = {
 'MR_strat':{'ticker':'','total_profit':0},
@@ -41,7 +41,7 @@ def import_stock(ticker):
         #pulls all close prices in all dates
         for date_key in raw_data[key1]:
             if date_key > last_date:
-                new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_volume]),2)},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
+                new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
         new_lines.reverse()
 
         with open(f'{directory_path}{ticker}.csv', 'a') as csv_file:
@@ -52,7 +52,7 @@ def import_stock(ticker):
         new_lines = []
         #pulls all close prices in all dates
         for date_key in raw_data[key1]:
-            new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_volume]),2)},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
+            new_lines.append(f'{date_key},{round(float(raw_data[key1][date_key][key3_close]),2)}\n')
         new_lines.reverse()
 
         with open(f'{directory_path}{ticker}.csv', 'w') as csv_file:

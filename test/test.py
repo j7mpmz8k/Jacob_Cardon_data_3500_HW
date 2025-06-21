@@ -5,3 +5,4 @@ print(lst[:])
 schol_api = 'http://www.multipliervantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=NG9C9EPVYBMQT0C8'
 
 personal_api = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=SD73U674WTF3MQAC'
+'BP8GODW1S3NADYB3'
