@@ -1,7 +1,7 @@
 import json
 import requests
 import time
-directory_path = '/home/crostini/Github/Jacob_Cardon_data_3500_HW/HW/final_project/'
+directory_path = '/home/crostini/Github/Jacob_Cardon_data_3500_HW/final_project/'
 tickers = ['AAPL', 'ADBE', 'META', 'AMZN', 'COIN', 'GOOG', 'HOOD', 'NVDA', 'TSLA', 'VOO']
 today_action = ''
 most_profitable = {
