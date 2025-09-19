@@ -17,9 +17,9 @@ results = {
 'analysis':{},
 }
 
-#reads all files from "stock_files" variable. 
-#Returns ticker and prices to be passed into trading strategy calculation functions along with functions to save to dictionary and .json file
 def import_stock(ticker):
+    """reads all files from "stock_files" variable. 
+    Returns ticker and prices to be passed into trading strategy calculation functions along with functions to save to dictionary and .json file"""
     req = requests.get(f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&outputsize=full&apikey=KSH53YGYAHBD4J02')
     time.sleep(12)
     raw_data = json.loads(req.text)#.loads() used instead of .load() since json dictionary is contained within a string
@@ -71,9 +71,10 @@ def import_stock(ticker):
 
 #######################################################################################################################
 
-#calculates previous "N_days" moving average along with error preventions ensuring "N_days" are available to calculate
-#pulls price data passed down from functions
+
 def calculate_Nday_avg(prices, N_days, day=0):
+    """calculates previous "N_days" moving average along with error preventions ensuring "N_days" are available to calculate
+    pulls price data passed down from functions"""
     dayN = day
     day1 = day-N_days
     if day1 < 0:
@@ -95,14 +96,14 @@ def calculate_ema(prices, period):
 
     return ema_values
 
-'''
-macd is is a calculation dirived from (shortEMA - longEMA = the macd line)
-the buy/sell signal is the (macd line - signalEMA = histogram)
-when histogram is negative, it signals a downtrend signaling to sell
-when histogram is positive, it signals an uptrend signaling to buy
-'''
+
 def calculate_macd(prices, short_period=12, long_period=26, signal_period=9):
-    # Ensure there's enough data for a single MACD value to be calculated
+    ''' macd is is a calculation dirived from (shortEMA - longEMA = the macd line)
+    the buy/sell signal is the (macd line - signalEMA = histogram)
+    when histogram is negative, it signals a downtrend signaling to sell
+    when histogram is positive, it signals an uptrend signaling to buy'''
+
+    # Ensures there's enough data for a single MACD value to be calculated
     if len(prices) < long_period + signal_period:
         print("Insufficent price history")
         return []
@@ -141,8 +142,8 @@ def calculate_macd(prices, short_period=12, long_period=26, signal_period=9):
 ###########################################################################################
 
 
-# calculates & prints trading strategy with at 2% difference from "N_days" moving average
 def MeanReversionStrategey(ticker, prices, N_days=200):
+    """calculates & prints trading strategy with at 2% difference from "N_days" moving average"""
     
     #initialization for transaction history analytics
     total_profit = 0
@@ -192,8 +193,8 @@ def MeanReversionStrategey(ticker, prices, N_days=200):
     print(f'percent return:\t  {final_profit_percentage}') 
     return total_profit, final_profit_percentage
 
-# calculates & prints trading strategy with any difference from "N_days" moving average*5% inverted from MeanReversionStrategey
 def BollingerBandsStrategy(ticker, prices, N_days=200):
+    """calculates & prints trading strategy with any difference from "N_days" moving average*5% inverted from MeanReversionStrategey"""
 
     #initialization for transaction history analytics
     total_profit = 0
@@ -309,8 +310,8 @@ def MacdStrategey(ticker, prices):
     return total_profit, final_profit_percentage
 
 
-# executes calculations of trading strategies, adds to results dictionary
 def analyze_stocks(ticker, prices):
+    """executes calculations of trading strategies, adds to results dictionary"""
     results['analysis'][f'{ticker}_prices'] = prices
     mr_profit, mr_returns = MeanReversionStrategey(ticker, prices)
     bb_profit, bb_returns = BollingerBandsStrategy(ticker, prices)
@@ -322,8 +323,9 @@ def analyze_stocks(ticker, prices):
     results['analysis'][f'{ticker}_macd_profit'] = macd_profit
     results['analysis'][f'{ticker}_macd_returns'] = macd_returns
 
-#exports dictionary to .json file
+
 def saveResults(dictionary):
+    """exports dictionary to .json file"""
     with open(f'{directory_path}results.json', 'w') as file:
         json.dump(dictionary, file, indent=4)
     print(f'\n"results.json" saved to: {directory_path}\n')
