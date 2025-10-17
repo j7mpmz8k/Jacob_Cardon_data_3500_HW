@@ -344,9 +344,9 @@ print(today_action)# tells user if current day is a buy or sell signal for each 
 
 #reveals most profitable stocks for each strategy for lifetime of price history
 print('Most lifetime profitable stock/strategies:')
-print(f'\tMean Reversion(200dayAVG):\t\t\t\t{most_profitable["MR_strat"]['ticker']} total profit @ ${most_profitable["MR_strat"]['total_profit']}')
-print(f'\tBollinger Bands(200dayAVG):\t\t\t\t{most_profitable["BB_strat"]['ticker']} total profit @ ${most_profitable["BB_strat"]['total_profit']}')
-print(f'\tMACD(shortEMA=12day longEMA=26day signalEMA-9day):\t{most_profitable["MACD_strat"]['ticker']} total profit @ ${most_profitable["MACD_strat"]['total_profit']}')
+print(f"\tMean Reversion(200dayAVG):\t\t\t\t{most_profitable['MR_strat']['ticker']} total profit @ ${most_profitable['MR_strat']['total_profit']}")
+print(f"\tBollinger Bands(200dayAVG):\t\t\t\t{most_profitable['BB_strat']['ticker']} total profit @ ${most_profitable['BB_strat']['total_profit']}")
+print(f"\tMACD(shortEMA=12day longEMA=26day signalEMA-9day):\t{most_profitable['MACD_strat']['ticker']} total profit @ ${most_profitable['MACD_strat']['total_profit']}")
 
 
 #writes saved dictionary to results.json file to directory path variable
